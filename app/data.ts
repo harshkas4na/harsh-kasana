@@ -14,8 +14,8 @@ export const FEATURED = [
     badge: "$9K grant",
     badgeColor: "green",
     tech: ["Solidity", "Next.js", "Convex", "Gemini AI", "wagmi/viem", "Base Mainnet"],
-    live: "https://app.thereactor.in",
-    github: "https://github.com/harshkas4na/REACTOR",
+    live: "https://reacdefi.app",
+    github: "https://github.com/harshkas4na/reacdefi",
     bullets: [
       "First production DApp on Reactive Network — featured on Chainwire, CryptoSlate & Blockchain Magazine",
       "AI assistant lets users deploy on-chain automations through natural language conversation",
@@ -35,7 +35,7 @@ export const FEATURED = [
     badge: "160 users / 48hrs",
     badgeColor: "blue",
     tech: ["Solana", "Next.js 15", "FastAPI", "Gemini", "Flash SDK", "Supabase", "Swiss Ephemeris"],
-    live: "https://hastrology-ai.vercel.app",
+    live: "https://hashtro.fun",
     github: "https://github.com/harshkas4na/Hashtro",
     bullets: [
       "Vedic-Hellenistic chart calculation generates personalized readings with cosmic-derived trade parameters",
@@ -67,7 +67,7 @@ export const FEATURED = [
     badge: "32 users pre-launch",
     badgeColor: "orange",
     tech: ["Next.js", "React 19", "Supabase", "WebSocket", "Surepass KYC", "Resend"],
-    live: "https://metro-sathi-nine.vercel.app",
+    live: "https://metrodiaries.in",
     github: null,
     bullets: [
       "Matches riders by route overlap and ±45-min time window across 250+ stations on 12 metro lines",
