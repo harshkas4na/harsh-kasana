@@ -312,7 +312,7 @@ export default function Portfolio() {
             { icon: "💰", text: "$13K+ in grants & prizes" },
             { icon: "🚀", text: "160 users in 48hrs"       },
             { icon: "📰", text: "Featured on CryptoSlate"  },
-            { icon: "🏆", text: "3× hackathon wins"        },
+            { icon: "🏆", text: "6× hackathon wins"        },
           ].map(({ icon, text }) => (
             <span key={text} style={{ fontSize: 14, color: C.textSub, display: "flex", alignItems: "center", gap: 7 }}>
               <span>{icon}</span><span style={{ color: C.text, fontWeight: 600 }}>{text}</span>
