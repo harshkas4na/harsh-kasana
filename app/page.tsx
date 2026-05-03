@@ -9,7 +9,7 @@ import {
   Quote, Target, Maximize2, Play, Search, ArrowRight, type LucideIcon,
 } from "lucide-react";
 import {
-  PROJECTS, MORE, TIMELINE, SKILLS, PRESS,
+  PROJECTS, MORE, TIMELINE, SKILL_PILLARS, SKILL_SUPPORT, PRESS,
   TESTIMONIALS, LOOKING_FOR, applyPreset,
   X_STATS, ARTICLES, PROJECT_HIGHLIGHTS,
   type Project,
@@ -258,9 +258,10 @@ function Nav({ onOpenPalette }: { onOpenPalette?: () => void }) {
           <X size={18} />
         </button>
         {[
-          { label: "projects", href: "#projects" },
-          { label: "about",    href: "#about"    },
-          { label: "journey",  href: "#journey"  },
+          { label: "how I build", href: "#how-i-build" },
+          { label: "projects",    href: "#projects"    },
+          { label: "about",       href: "#about"       },
+          { label: "journey",     href: "#journey"     },
           { label: "writing",  href: "https://medium.com/@harshkasana05", external: true },
         ].map(({ label, href, external }) => (
           <a key={label} href={href} target={external ? "_blank" : undefined} rel={external ? "noopener noreferrer" : undefined}
@@ -797,10 +798,11 @@ function ProjectsSection() {
 // ─── side rails (≥1280px only) ───────────────────────────────────────────────
 
 const RAIL_SECTIONS = [
-  { id: "projects", label: "Projects" },
-  { id: "about",    label: "About" },
-  { id: "journey",  label: "Journey" },
-  { id: "contact",  label: "Contact" },
+  { id: "how-i-build", label: "How I Build" },
+  { id: "projects",    label: "Projects" },
+  { id: "about",       label: "About" },
+  { id: "journey",     label: "Journey" },
+  { id: "contact",     label: "Contact" },
 ];
 const RAIL_IDS = RAIL_SECTIONS.map((s) => s.id);
 
@@ -982,8 +984,9 @@ type CmdItem = {
 
 function buildCmdItems(): CmdItem[] {
   const sections: CmdItem[] = [
-    { id: "nav-top",      label: "Top",           group: "Navigate", Icon: ArrowRight,   kind: "anchor", target: "#top" },
-    { id: "nav-projects", label: "Projects",      group: "Navigate", Icon: ArrowRight,   kind: "anchor", target: "#projects" },
+    { id: "nav-top",         label: "Top",          group: "Navigate", Icon: ArrowRight, kind: "anchor", target: "#top" },
+    { id: "nav-how-i-build", label: "How I Build",  group: "Navigate", Icon: ArrowRight, kind: "anchor", target: "#how-i-build" },
+    { id: "nav-projects",    label: "Projects",     group: "Navigate", Icon: ArrowRight, kind: "anchor", target: "#projects" },
     { id: "nav-about",    label: "About",         group: "Navigate", Icon: ArrowRight,   kind: "anchor", target: "#about" },
     { id: "nav-journey",  label: "Journey",       group: "Navigate", Icon: ArrowRight,   kind: "anchor", target: "#journey" },
     { id: "nav-contact",  label: "Contact",       group: "Navigate", Icon: ArrowRight,   kind: "anchor", target: "#contact" },
@@ -1199,6 +1202,69 @@ export default function Portfolio() {
 
       <Divider />
 
+      {/* ── how I build ── */}
+      <section id="how-i-build" style={{ maxWidth: W, margin: "0 auto", padding: `48px ${px}` }}>
+        <Reveal><SectionLabel>How I Build</SectionLabel></Reveal>
+        <Reveal delay={0.05}>
+          <p style={{ color: C.textSub, fontSize: 16, lineHeight: 1.7, margin: "0 0 28px", maxWidth: 640 }}>
+            The path from idea to shipped is the same every time, regardless of stack — contract, web app, desktop binary, or infra:
+          </p>
+        </Reveal>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 18, maxWidth: 720 }}>
+          {[
+            {
+              n: "01",
+              title: "Argue with AI before code",
+              body:
+                "I don't ask AI to validate me — I ask it to break me. I pitch the idea, it counters, I push back, it counters harder. By the time I open an editor, the direction has survived a real adversary, not just my own optimism.",
+            },
+            {
+              n: "02",
+              title: "MVP, not a deck",
+              body:
+                "Whatever shape the product needs — web app, desktop binary, on-chain protocol, mobile, internal infra — I build the smallest version that proves the loop end-to-end. No half-done branches, no “I'll come back to this.”",
+            },
+            {
+              n: "03",
+              title: "New stack? Steep, then ship",
+              body:
+                "If a project needs something I haven’t built before, I don’t fake it. I read codebases that already do it well, copy the patterns into my head, then build with them. Electron + native screen capture (FocuClone), Solana perpetuals via Flash/Drift (Hashtro), x402 micropayments (rc-agents) — none of that was familiar before I shipped it.",
+            },
+            {
+              n: "04",
+              title: "Finish",
+              body:
+                "Every project on this page has a live URL or a video. I don't list ideas, and I don't leave half-finished work behind me.",
+            },
+          ].map((step, i) => (
+            <Reveal key={step.n} delay={0.07 + i * 0.05}>
+              <div style={{ display: "flex", gap: 18, alignItems: "flex-start" }}>
+                <span
+                  style={{
+                    fontSize: 12, fontWeight: 700, color: C.accent,
+                    fontFamily: "ui-monospace, monospace", letterSpacing: "0.08em",
+                    paddingTop: 4, flexShrink: 0, minWidth: 28,
+                  }}
+                >
+                  {step.n}
+                </span>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <h3 style={{ fontSize: 16, fontWeight: 700, color: C.text, margin: "0 0 6px", letterSpacing: "-0.01em" }}>
+                    {step.title}
+                  </h3>
+                  <p style={{ fontSize: 14, color: C.textSub, lineHeight: 1.7, margin: 0 }}>
+                    {step.body}
+                  </p>
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      <Divider />
+
       {/* ── projects ── */}
       <section id="projects" style={{ maxWidth: W, margin: "0 auto", padding: `48px ${px}` }}>
         <Suspense fallback={<SectionLabel>Selected Projects</SectionLabel>}>
@@ -1276,10 +1342,22 @@ export default function Portfolio() {
             </p>
           </Reveal>
           <Reveal delay={0.12}>
-            <p style={{ fontSize: 11, fontWeight: 700, color: C.textMuted, letterSpacing: "0.14em", textTransform: "uppercase", fontFamily: "ui-monospace, monospace", marginBottom: 12 }}>Skills</p>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 7 }}>
-              {SKILLS.map((s) => <Tag key={s}>{s}</Tag>)}
+            <p style={{ fontSize: 11, fontWeight: 700, color: C.textMuted, letterSpacing: "0.14em", textTransform: "uppercase", fontFamily: "ui-monospace, monospace", marginBottom: 14 }}>Where I focus</p>
+            <div style={{ display: "flex", flexDirection: "column", gap: 14, marginBottom: 22 }}>
+              {SKILL_PILLARS.map((p) => (
+                <div key={p.title} style={{ background: C.bgCard, border: `1px solid ${C.border}`, borderRadius: 10, padding: "14px 16px" }}>
+                  <p style={{ fontSize: 14, fontWeight: 700, color: C.text, margin: 0, letterSpacing: "-0.01em" }}>{p.title}</p>
+                  <p style={{ fontSize: 13, color: C.textSub, lineHeight: 1.6, margin: "4px 0 10px" }}>{p.line}</p>
+                  <p style={{ fontSize: 12, color: C.textMuted, fontFamily: "ui-monospace, monospace", letterSpacing: "0.02em", margin: 0 }}>
+                    {p.tools.join(" · ")}
+                  </p>
+                </div>
+              ))}
             </div>
+            <p style={{ fontSize: 12, color: C.textMuted, fontFamily: "ui-monospace, monospace", letterSpacing: "0.02em", margin: 0, lineHeight: 1.7 }}>
+              <span style={{ textTransform: "uppercase", letterSpacing: "0.12em", marginRight: 8 }}>also fluent in</span>
+              {SKILL_SUPPORT.join(" · ")}
+            </p>
           </Reveal>
         </div>
       </section>

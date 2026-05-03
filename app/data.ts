@@ -611,13 +611,39 @@ export const TIMELINE = [
 ];
 
 // ─── skills ───────────────────────────────────────────────────────────────────
-export const SKILLS = [
-  "Solidity", "TypeScript", "JavaScript", "Rust", "Python", "C++",
-  "Next.js", "React", "Node.js", "FastAPI",
-  "Hardhat", "Foundry", "wagmi/viem",
-  "Supabase", "PostgreSQL", "Docker",
-  "Solana", "Ethereum", "Reactive Network",
+// Three primary pillars + a quiet "also fluent in" line. The goal is hierarchy:
+// main work reads as main, supporting tools read as supporting.
+export const SKILL_PILLARS: { title: string; line: string; tools: string[] }[] = [
+  {
+    title: "Smart Contracts",
+    line:  "Production deployments on EVM mainnets and Solana. Reactive Smart Contracts as a daily driver.",
+    tools: ["Solidity", "Reactive SCs", "Rust + Anchor", "Foundry", "Hardhat", "wagmi/viem"],
+  },
+  {
+    title: "Full-Stack Product",
+    line:  "Contract, API, and UI in the same week. Realtime, auth, and KYC where the product needs them.",
+    tools: ["Next.js", "TypeScript", "FastAPI", "Node.js", "Supabase + Postgres", "Convex"],
+  },
+  {
+    title: "AI Integration",
+    line:  "Natural language → on-chain action. Agent loops, MCP servers, x402 micropayments.",
+    tools: ["Gemini", "Claude / Claude Code", "MCP", "x402", "TensorFlow"],
+  },
 ];
+
+// Quiet supporting layer — kept short on purpose.
+export const SKILL_SUPPORT: string[] = [
+  "Electron", "Docker", "WebSocket", "Privy", "Tailwind",
+  "Framer Motion", "ffmpeg", "Vercel", "Sui", "Citrea", "Base",
+];
+
+// Flat list kept for any consumer that just wants tags. Deduplicated.
+export const SKILLS: string[] = Array.from(
+  new Set([
+    ...SKILL_PILLARS.flatMap((p) => p.tools),
+    ...SKILL_SUPPORT,
+  ])
+);
 
 // ─── testimonials ─────────────────────────────────────────────────────────────
 // Add real quotes here once collected. Section auto-hides if empty.
