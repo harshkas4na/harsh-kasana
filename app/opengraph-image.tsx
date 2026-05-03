@@ -37,12 +37,12 @@ export default function OGImage() {
 
         {/* role */}
         <div style={{ fontSize: 24, color: "#a09c96", marginBottom: 44 }}>
-          Junior Solidity Developer · <span style={{ color: "#e8b45e" }}>Reactive Network</span> · IIIT Nagpur
+          Solidity & DApp Developer · <span style={{ color: "#e8b45e" }}>Reactive Network</span> · IIIT Nagpur
         </div>
 
         {/* stats */}
         <div style={{ display: "flex", gap: 16 }}>
-          {[["$13K+", "grants & prizes"], ["160", "users in 48hrs"], ["3×", "hackathon wins"], ["73+", "GitHub repos"]].map(([stat, label]) => (
+          {[["$13K+", "grants & prizes"], ["160", "users in 48hrs"], ["6×", "hackathon wins"], ["4×", "press features"]].map(([stat, label]) => (
             <div key={label} style={{ display: "flex", flexDirection: "column", gap: 4, padding: "14px 20px", background: "#161616", border: "1px solid #262626", borderRadius: 10 }}>
               <span style={{ fontSize: 28, fontWeight: 700, color: "#e8b45e" }}>{stat}</span>
               <span style={{ fontSize: 13, color: "#5a5650" }}>{label}</span>

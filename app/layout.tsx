@@ -1,5 +1,7 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
 const inter = Inter({
@@ -9,38 +11,54 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Harsh Kasana — Blockchain Developer",
+  title: "Harsh Kasana — Solidity & DApp Developer",
   description:
-    "Junior Solidity Developer at Reactive Network. I build DeFi automation tools, cross-chain protocols, and AI-powered blockchain products end-to-end — from ideation to shipping.",
+    "Solidity & DApp Developer at Reactive Network. I build DeFi automation, cross-chain protocols, and AI-powered blockchain products end-to-end — from ideation to production.",
   metadataBase: new URL("https://harshkasana.dev"),
-  colorScheme: "dark",
+  alternates: { canonical: "/" },
+  keywords: [
+    "Harsh Kasana", "Solidity Developer", "DApp Developer", "Reactive Network",
+    "DeFi", "Smart Contracts", "Web3", "Blockchain Engineer", "Cross-chain",
+    "Reactive Smart Contracts", "Next.js", "TypeScript",
+  ],
+  authors: [{ name: "Harsh Kasana", url: "https://harshkasana.dev" }],
+  creator: "Harsh Kasana",
   openGraph: {
-    title: "Harsh Kasana — Blockchain Developer",
+    title: "Harsh Kasana — Solidity & DApp Developer",
     description:
-      "Building DeFi infrastructure at Reactive Network. $13K+ in grants, 160 users in 48hrs, featured on CryptoSlate.",
+      "Building DeFi infrastructure at Reactive Network. $13K+ in grants, 160 users in 48hrs, featured on CryptoSlate, Chainwire & Blockchain Magazine.",
     url: "https://harshkasana.dev",
     siteName: "Harsh Kasana",
     type: "website",
+    locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Harsh Kasana — Blockchain Developer",
-    description: "Building DeFi infrastructure at Reactive Network.",
+    title: "Harsh Kasana — Solidity & DApp Developer",
+    description:
+      "Building DeFi infrastructure at Reactive Network. $13K+ in grants, 160 users in 48hrs.",
     creator: "@0xkasana",
   },
   icons: {
     icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+    apple: [{ url: "/favicon.svg" }],
   },
+  robots: { index: true, follow: true },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export const viewport: Viewport = {
+  themeColor: "#0f0f0f",
+  colorScheme: "dark",
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={inter.variable}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <Analytics />
+        <SpeedInsights />
+      </body>
     </html>
   );
 }
