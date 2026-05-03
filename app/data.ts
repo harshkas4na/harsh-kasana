@@ -41,6 +41,7 @@ export type Project = {
   press?: { label: string; url: string }[];
   image?: string | null;
   video?: string | null;
+  videoPreview?: string | null;
   featured?: boolean;
 };
 

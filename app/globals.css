@@ -112,6 +112,45 @@ body {
   gap: 10px;
   align-items: stretch;
 }
+@media (max-width: 480px) {
+  .press-strip {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+}
+
+/* ── project card responsive padding + collapsible animation ── */
+.project-card {
+  padding: 20px 22px 22px;
+}
+@media (max-width: 480px) {
+  .project-card {
+    padding: 16px 14px 18px;
+    border-radius: 12px;
+  }
+}
+
+.project-card-collapsible {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.24s ease;
+  overflow: hidden;
+}
+.project-card-collapsible[data-open="true"] {
+  grid-template-rows: 1fr;
+}
+@media (prefers-reduced-motion: reduce) {
+  .project-card-collapsible { transition: none; }
+}
+
+/* ── hero photo responsive ───────────────────────────────── */
+.hero-photo {
+  width: 96px;
+  height: 96px;
+}
+@media (max-width: 480px) {
+  .hero-photo { width: 72px; height: 72px; }
+}
 
 /* ── social link hover preview ──────────────────────────── */
 .social-preview {

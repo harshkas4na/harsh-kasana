@@ -197,7 +197,7 @@ function Nav() {
         ].map(({ label, href, external }) => (
           <a key={label} href={href} target={external ? "_blank" : undefined} rel={external ? "noopener noreferrer" : undefined}
             onClick={() => setMenuOpen(false)}
-            style={{ fontSize: 30, fontWeight: 700, color: C.text, textDecoration: "none", letterSpacing: "-0.02em" }}>
+            style={{ fontSize: "clamp(22px, 6.5vw, 30px)", fontWeight: 700, color: C.text, textDecoration: "none", letterSpacing: "-0.02em" }}>
             {label}
           </a>
         ))}
@@ -230,7 +230,7 @@ function VideoLightbox({ src, title, onClose }: { src: string; title: string; on
         position: "fixed", inset: 0, zIndex: 100,
         background: "rgba(8,8,8,0.92)", backdropFilter: "blur(8px)",
         display: "flex", alignItems: "center", justifyContent: "center",
-        padding: "clamp(16px, 4vw, 48px)", animation: "fadeUp 0.2s ease both",
+        padding: "clamp(8px, 4vw, 48px)", animation: "fadeUp 0.2s ease both",
       }}
     >
       <button
@@ -269,6 +269,7 @@ function VideoLightbox({ src, title, onClose }: { src: string; title: string; on
 
 function ProjectMedia({ p }: { p: Project }) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [lightbox, setLightbox] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -281,6 +282,29 @@ function ProjectMedia({ p }: { p: Project }) {
   const handleLeave = () => {
     if (videoRef.current) videoRef.current.pause();
   };
+
+  // touch devices: autoplay when card is in view, pause when it leaves
+  useEffect(() => {
+    if (!p.video || !containerRef.current || !videoRef.current) return;
+    if (typeof window === "undefined") return;
+    const isTouch = window.matchMedia?.("(hover: none)").matches;
+    if (!isTouch) return;
+
+    const el = containerRef.current;
+    const v = videoRef.current;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          v.play().catch(() => {});
+        } else {
+          v.pause();
+        }
+      },
+      { threshold: 0.55 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [p.video]);
 
   if (!p.image && !p.video) {
     return (
@@ -297,6 +321,7 @@ function ProjectMedia({ p }: { p: Project }) {
   return (
     <>
       <div
+        ref={containerRef}
         className="project-media"
         data-playing={isPlaying ? "true" : "false"}
         onMouseEnter={handleEnter}
@@ -323,7 +348,8 @@ function ProjectMedia({ p }: { p: Project }) {
         {p.video && (
           <video
             ref={videoRef}
-            src={p.video}
+            src={p.videoPreview || p.video}
+            poster={p.image || undefined}
             muted
             loop
             playsInline
@@ -358,12 +384,25 @@ function ProjectMedia({ p }: { p: Project }) {
 function ProjectCard({ p, i }: { p: Project; i: number }) {
   const [open, setOpen] = useState(false);
   const [hovered, setHovered] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  const handleToggle = () => {
+    const willOpen = !open;
+    setOpen(willOpen);
+    if (willOpen) {
+      requestAnimationFrame(() => {
+        cardRef.current?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      });
+    }
+  };
 
   return (
     <Reveal delay={i * 0.07}>
       <div
+        ref={cardRef}
         onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
-        style={{ background: hovered ? C.bgCardHover : C.bgCard, border: `1px solid ${hovered ? C.borderHover : C.border}`, borderRadius: 14, padding: "20px 22px 22px", marginBottom: 14, transition: "background 0.15s, border-color 0.15s" }}
+        className="project-card"
+        style={{ background: hovered ? C.bgCardHover : C.bgCard, border: `1px solid ${hovered ? C.borderHover : C.border}`, borderRadius: 14, marginBottom: 14, transition: "background 0.15s, border-color 0.15s" }}
       >
         <ProjectMedia p={p} />
 
@@ -371,10 +410,10 @@ function ProjectCard({ p, i }: { p: Project; i: number }) {
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 16, marginBottom: 8, flexWrap: "wrap" }}>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 5, flexWrap: "wrap" }}>
-              <h3 style={{ fontSize: 18, fontWeight: 700, color: C.text, margin: 0, letterSpacing: "-0.02em" }}>{p.name}</h3>
-              <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: C.textMuted, fontFamily: "ui-monospace, monospace" }}>{p.category}</span>
+              <h3 style={{ fontSize: "clamp(16px, 4.4vw, 18px)", fontWeight: 700, color: C.text, margin: 0, letterSpacing: "-0.02em" }}>{p.name}</h3>
+              <span style={{ fontSize: "clamp(10px, 3vw, 11px)", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: C.textMuted, fontFamily: "ui-monospace, monospace" }}>{p.category}</span>
             </div>
-            <p style={{ color: C.textSub, fontSize: 15, margin: 0, lineHeight: 1.6 }}>{p.hook}</p>
+            <p style={{ color: C.textSub, fontSize: "clamp(14px, 3.8vw, 15px)", margin: 0, lineHeight: 1.6 }}>{p.hook}</p>
           </div>
           <Badge label={p.badge} color={p.badgeColor} />
         </div>
@@ -387,33 +426,36 @@ function ProjectCard({ p, i }: { p: Project; i: number }) {
         )}
 
         {/* expandable */}
-        {open && (
-          <div style={{ margin: "16px 0 4px", padding: "16px 18px", background: C.bgInset, borderRadius: 10, border: `1px solid ${C.border}` }}>
-            {p.bullets.map((b, j) => (
-              <div key={j} style={{ display: "flex", gap: 12, marginBottom: j < p.bullets.length - 1 ? 12 : 0 }}>
-                <span style={{ color: C.accent, fontSize: 14, flexShrink: 0, lineHeight: 1.6 }}>→</span>
-                <p style={{ color: C.textSub, fontSize: 14, margin: 0, lineHeight: 1.7 }}>{b}</p>
-              </div>
-            ))}
-            {p.press && p.press.length > 0 && (
-              <div style={{ display: "flex", gap: 8, marginTop: 16, paddingTop: 14, borderTop: `1px solid ${C.border}`, flexWrap: "wrap", alignItems: "center" }}>
-                <span style={{ fontSize: 11, color: C.textMuted, fontFamily: "ui-monospace, monospace", letterSpacing: "0.08em" }}>as seen in</span>
-                {p.press.map((pr) => (
-                  <a key={pr.label} href={pr.url} target="_blank" rel="noopener noreferrer"
-                    style={{ fontSize: 12, fontWeight: 600, color: C.accent, textDecoration: "none", padding: "3px 10px", borderRadius: 5, background: C.accentBg, border: `1px solid ${C.accentBorder}`, transition: "all 0.15s", display: "inline-flex", alignItems: "center", gap: 4 }}
-                    onMouseEnter={(e) => { e.currentTarget.style.background = C.accent; e.currentTarget.style.color = "#0f0f0f"; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.background = C.accentBg; e.currentTarget.style.color = C.accent; }}
-                  >
-                    {pr.label} <ExternalLink size={10} />
-                  </a>
-                ))}
-              </div>
-            )}
+        <div className="project-card-collapsible" data-open={open ? "true" : "false"} aria-hidden={!open}>
+          <div style={{ minHeight: 0 }}>
+            <div style={{ margin: "16px 0 4px", padding: "16px 18px", background: C.bgInset, borderRadius: 10, border: `1px solid ${C.border}` }}>
+              {p.bullets.map((b, j) => (
+                <div key={j} style={{ display: "flex", gap: 12, marginBottom: j < p.bullets.length - 1 ? 12 : 0 }}>
+                  <span style={{ color: C.accent, fontSize: 14, flexShrink: 0, lineHeight: 1.6 }}>→</span>
+                  <p style={{ color: C.textSub, fontSize: 14, margin: 0, lineHeight: 1.7 }}>{b}</p>
+                </div>
+              ))}
+              {p.press && p.press.length > 0 && (
+                <div style={{ display: "flex", gap: 8, marginTop: 16, paddingTop: 14, borderTop: `1px solid ${C.border}`, flexWrap: "wrap", alignItems: "center" }}>
+                  <span style={{ fontSize: 11, color: C.textMuted, fontFamily: "ui-monospace, monospace", letterSpacing: "0.08em" }}>as seen in</span>
+                  {p.press.map((pr) => (
+                    <a key={pr.label} href={pr.url} target="_blank" rel="noopener noreferrer"
+                      style={{ fontSize: 12, fontWeight: 600, color: C.accent, textDecoration: "none", padding: "3px 10px", borderRadius: 5, background: C.accentBg, border: `1px solid ${C.accentBorder}`, transition: "all 0.15s", display: "inline-flex", alignItems: "center", gap: 4 }}
+                      onMouseEnter={(e) => { e.currentTarget.style.background = C.accent; e.currentTarget.style.color = "#0f0f0f"; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.background = C.accentBg; e.currentTarget.style.color = C.accent; }}
+                    >
+                      {pr.label} <ExternalLink size={10} />
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
-        )}
+        </div>
 
         {/* toggle */}
-        <button onClick={() => setOpen(!open)}
+        <button onClick={handleToggle}
+          aria-expanded={open}
           style={{ background: "none", border: "none", color: C.textMuted, fontSize: 12, cursor: "pointer", padding: "4px 0", display: "flex", alignItems: "center", gap: 4, marginTop: 12, marginBottom: 14, fontFamily: "inherit", transition: "color 0.15s" }}
           onMouseEnter={(e) => (e.currentTarget.style.color = C.accent)}
           onMouseLeave={(e) => (e.currentTarget.style.color = C.textMuted)}
@@ -559,7 +601,7 @@ function SocialLink({ Icon, href, label, handle, blurb, preview }: SocialDef) {
 
 function Hero({ px, W }: { px: string; W: number }) {
   return (
-    <section style={{ maxWidth: W, margin: "0 auto", padding: `clamp(48px, 9vh, 96px) ${px} 56px`, animation: "fadeUp 0.5s ease both" }}>
+    <section style={{ maxWidth: W, margin: "0 auto", padding: `clamp(48px, 9vh, 96px) ${px} clamp(36px, 6vh, 56px)`, animation: "fadeUp 0.5s ease both" }}>
 
       {/* status pills */}
       <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 32 }}>
@@ -575,20 +617,20 @@ function Hero({ px, W }: { px: string; W: number }) {
 
       <div className="hero-row">
         {/* profile photo */}
-        <div style={{ flexShrink: 0 }}>
+        <div className="hero-photo" style={{ flexShrink: 0 }}>
           <Image src="/profile-photos/pic.jpg" alt="Harsh Kasana" width={96} height={96}
 style={{
-  width: 96,
-  height: 96,
+  width: "100%",
+  height: "100%",
   borderRadius: "50%",
   objectFit: "cover",
-  objectPosition: "50% 22%", // move crop upward to keep face centered
+  objectPosition: "50% 22%",
   border: `1px solid ${C.border}`,
 }}          />
         </div>
 
         <div style={{ flex: 1, minWidth: 0 }}>
-          <h1 style={{ fontSize: "clamp(32px, 4.6vw, 46px)", fontWeight: 800, letterSpacing: "-0.035em", color: C.text, margin: "0 0 10px", lineHeight: 1.08 }}>
+          <h1 style={{ fontSize: "clamp(28px, 7vw, 46px)", fontWeight: 800, letterSpacing: "-0.035em", color: C.text, margin: "0 0 10px", lineHeight: 1.1 }}>
             Harsh Kasana
           </h1>
 
@@ -604,12 +646,12 @@ style={{
           </div>
 
           {/* primary value prop — what readers should see first */}
-          <p style={{ color: C.text, fontSize: 17, lineHeight: 1.65, margin: "0 0 14px", maxWidth: 600, fontWeight: 500, letterSpacing: "-0.005em" }}>
+          <p style={{ color: C.text, fontSize: "clamp(15px, 4vw, 17px)", lineHeight: 1.65, margin: "0 0 14px", maxWidth: "min(600px, 100%)", fontWeight: 500, letterSpacing: "-0.005em" }}>
             I ship DeFi products end-to-end — ideation to production.{" "}
             <span style={{ color: C.textSub, fontWeight: 400 }}>Taste over tooling.</span>
           </p>
 
-          <p style={{ color: C.textMuted, fontSize: 14, lineHeight: 1.65, margin: 0, maxWidth: 600 }}>
+          <p style={{ color: C.textMuted, fontSize: 14, lineHeight: 1.65, margin: 0, maxWidth: "min(600px, 100%)" }}>
             Building DeFi infrastructure at{" "}
             <a href="https://reactive.network" target="_blank" rel="noopener noreferrer" style={{ color: C.textSub, fontWeight: 500, textDecoration: "underline", textDecorationColor: C.border, textUnderlineOffset: 3 }}>
               Reactive Network
