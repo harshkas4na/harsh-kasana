@@ -86,7 +86,7 @@ export const PROJECTS: Project[] = [
     live: "https://hashtro.fun",
     github: "https://github.com/harshkas4na/Hashtro",
     image: "/hero-images/hashtro-hero.png",
-    video: "/intro-videos/hashtro-intro.mp4",
+    video: "/intro-videos/Hastro-intro.mp4",
     featured: true,
     bullets: [
       "Vedic-Hellenistic chart calculation generates personalized readings with cosmic-derived trade parameters",
