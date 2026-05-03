@@ -139,12 +139,59 @@ function Divider() { return <div style={{ height: 1, background: C.border }} />;
 function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const openBtnRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const h = () => setScrolled(window.scrollY > 32);
     window.addEventListener("scroll", h);
     return () => window.removeEventListener("scroll", h);
   }, []);
+
+  // focus trap + restore + Esc-to-close + body scroll lock
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    const root = menuRef.current;
+    if (!root) return;
+
+    const prevActive = document.activeElement as HTMLElement | null;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const focusables = () =>
+      Array.from(root.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      )).filter((el) => !el.hasAttribute("aria-hidden"));
+
+    focusables()[0]?.focus();
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        setMenuOpen(false);
+        return;
+      }
+      if (e.key !== "Tab") return;
+      const items = focusables();
+      if (items.length === 0) return;
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevOverflow;
+      (prevActive ?? openBtnRef.current)?.focus();
+    };
+  }, [menuOpen]);
 
   const links = ["projects", "about", "journey"] as const;
 
@@ -175,15 +222,17 @@ function Nav() {
               <BookOpen size={14} /> writing
             </a>
           </div>
-          <button className="show-mobile" onClick={() => setMenuOpen(true)}
+          <button ref={openBtnRef} className="show-mobile" onClick={() => setMenuOpen(true)}
             style={{ background: "none", border: `1px solid ${C.border}`, borderRadius: 7, padding: "6px 8px", cursor: "pointer", color: C.textSub, alignItems: "center", justifyContent: "center" }}
-            aria-label="Open navigation">
+            aria-label="Open navigation"
+            aria-expanded={menuOpen}
+            aria-controls="mobile-menu">
             <Menu size={18} />
           </button>
         </div>
       </nav>
 
-      <div className={`mobile-menu${menuOpen ? " open" : ""}`} role="dialog" aria-modal="true">
+      <div ref={menuRef} id="mobile-menu" className={`mobile-menu${menuOpen ? " open" : ""}`} role="dialog" aria-modal="true" aria-label="Site navigation">
         <button onClick={() => setMenuOpen(false)}
           style={{ position: "absolute", top: 16, right: 20, background: "none", border: `1px solid ${C.border}`, borderRadius: 7, padding: "6px 8px", cursor: "pointer", color: C.textSub }}
           aria-label="Close navigation">
@@ -566,9 +615,9 @@ function SocialLink({ Icon, href, label, handle, blurb, preview }: SocialDef) {
   return (
     <div style={{ position: "relative" }}
       onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}
+      onFocus={() => setHover(true)} onBlur={() => setHover(false)}
     >
       <a href={href} target="_blank" rel="noopener noreferrer"
-        onFocus={() => setHover(true)} onBlur={() => setHover(false)}
         style={{ display: "inline-flex", alignItems: "center", gap: 7, fontSize: 13, fontWeight: 500, color: hover ? C.text : C.textSub, padding: "7px 13px", borderRadius: 8, border: `1px solid ${hover ? C.borderHover : C.border}`, background: hover ? C.bgCard : "transparent", textDecoration: "none", transition: "all 0.15s" }}
       >
         <Icon size={14} /> {label}
@@ -618,7 +667,7 @@ function Hero({ px, W }: { px: string; W: number }) {
       <div className="hero-row">
         {/* profile photo */}
         <div className="hero-photo" style={{ flexShrink: 0 }}>
-          <Image src="/profile-photos/pic.jpg" alt="Harsh Kasana" width={96} height={96}
+          <Image src="/profile-photos/pic.jpg" alt="Harsh Kasana" width={96} height={96} priority
 style={{
   width: "100%",
   height: "100%",
@@ -941,7 +990,7 @@ export default function Portfolio() {
         <div className="more-grid">
           {MORE.map((p, i) => (
             <Reveal key={p.name} delay={i * 0.05}>
-              <a href={p.link} target="_blank" rel="noopener noreferrer"
+              <a href={`/projects/${p.slug}`}
                 style={{ display: "block", padding: "16px 18px", borderRadius: 10, border: `1px solid ${C.border}`, background: C.bgCard, textDecoration: "none", transition: "all 0.15s" }}
                 onMouseEnter={(e) => { e.currentTarget.style.background = C.bgCardHover; e.currentTarget.style.borderColor = C.borderHover; }}
                 onMouseLeave={(e) => { e.currentTarget.style.background = C.bgCard; e.currentTarget.style.borderColor = C.border; }}

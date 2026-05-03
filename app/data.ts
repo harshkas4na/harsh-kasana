@@ -213,18 +213,350 @@ export function applyPreset(preset?: string | null): Project[] {
 }
 
 // ─── more projects ────────────────────────────────────────────────────────────
-export const MORE = [
-  { name: "rc-debugger",         desc: "TUI debugger & monitor for Reactive Network cross-chain flows — 17 health diagnostics", link: "https://github.com/harshkas4na/rc-debugger",          tag: "DevTools" },
-  { name: "Walrus-SDK",          desc: "TypeScript SDK for Walrus decentralized storage (Sui). Published on npm.",              link: "https://walrus-sdk.vercel.app",                        tag: "SDK"      },
-  { name: "Provenance",          desc: "On-chain reputation scoring for Citrea (first ZK-Rollup on Bitcoin)",                    link: "https://provenance-jade.vercel.app",                   tag: "DeFi"     },
-  { name: "ReactiveFlow-Lender", desc: "Cross-chain lending — deposit ETH on Sepolia, receive MATIC via Reactive Network",      link: "https://reactive-flow-lender.vercel.app",              tag: "DeFi"     },
-  { name: "Protocol-Pal",        desc: "AI Web3 assistant that executes blockchain transactions via natural language + MCP",    link: "https://github.com/harshkas4na/Protocol-Pal",          tag: "AI"       },
-  { name: "SWARTZ",              desc: "Decentralized social media with TensorFlow content moderation + reactive governance",   link: "https://github.com/harshkas4na/SWARTZ",                tag: "Web3"     },
-  { name: "Fiducia",             desc: "Multi-party wallet + crypto insurance (loan protection, threshold coverage)",           link: "https://fiducia-docs.vercel.app",                      tag: "DeFi"     },
-  { name: "Mercado",             desc: "NFT marketplace with constant-product dynamic pricing + MERCAT token economics",        link: "https://github.com/harshkas4na/Mercado",               tag: "NFT"      },
-  { name: "CryptoTree",          desc: "Crypto visualization and exploration app",                                                link: "https://crytpo-tree.vercel.app",                       tag: "Web3"     },
-  { name: "reactive-network-dev",desc: "Claude Code skill — teaches Claude to design Reactive Network systems",                  link: "https://github.com/harshkas4na/reactive-network-dev", tag: "DevTools" },
+export type More = { slug: string; name: string; desc: string; link: string; tag: string };
+export const MORE: More[] = [
+  { slug: "rc-debugger",          name: "rc-debugger",         desc: "TUI debugger & monitor for Reactive Network cross-chain flows — 17 health diagnostics", link: "https://github.com/harshkas4na/rc-debugger",          tag: "DevTools" },
+  { slug: "walrus-sdk",           name: "Walrus-SDK",          desc: "TypeScript SDK for Walrus decentralized storage (Sui). Published on npm.",              link: "https://walrus-sdk.vercel.app",                        tag: "SDK"      },
+  { slug: "provenance",           name: "Provenance",          desc: "On-chain reputation scoring for Citrea (first ZK-Rollup on Bitcoin)",                    link: "https://provenance-jade.vercel.app",                   tag: "DeFi"     },
+  { slug: "reactiveflow-lender",  name: "ReactiveFlow-Lender", desc: "Cross-chain lending — deposit ETH on Sepolia, receive MATIC via Reactive Network",      link: "https://reactive-flow-lender.vercel.app",              tag: "DeFi"     },
+  { slug: "protocol-pal",         name: "Protocol-Pal",        desc: "AI Web3 assistant that executes blockchain transactions via natural language + MCP",    link: "https://github.com/harshkas4na/Protocol-Pal",          tag: "AI"       },
+  { slug: "swartz",               name: "SWARTZ",              desc: "Decentralized social media with TensorFlow content moderation + reactive governance",   link: "https://github.com/harshkas4na/SWARTZ",                tag: "Web3"     },
+  { slug: "fiducia",              name: "Fiducia",             desc: "Multi-party wallet + crypto insurance (loan protection, threshold coverage)",           link: "https://fiducia-docs.vercel.app",                      tag: "DeFi"     },
+  { slug: "mercado",              name: "Mercado",             desc: "NFT marketplace with constant-product dynamic pricing + MERCAT token economics",        link: "https://github.com/harshkas4na/Mercado",               tag: "NFT"      },
+  { slug: "cryptotree",           name: "CryptoTree",          desc: "Interactive mind-map of the blockchain ecosystem — 12 pillars, navigable",              link: "https://crytpo-tree.vercel.app",                       tag: "Web3"     },
+  { slug: "reactive-network-dev", name: "reactive-network-dev",desc: "Claude Code skill — teaches Claude to design Reactive Network systems",                 link: "https://github.com/harshkas4na/reactive-network-dev", tag: "DevTools" },
 ];
+
+// ─── project detail pages (for /projects/[slug]) ─────────────────────────────
+export type ProjectDetail = {
+  slug: string;
+  name: string;
+  tagline: string;
+  icon: string;
+  accent: "amber" | "blue" | "purple" | "green" | "rose";
+  problem: string;
+  mechanism: string;
+  outcome: string;
+  tech: string[];
+  flow?: { step: string; detail: string }[];
+  howToUse:
+    | { kind: "dev"; lang?: string; steps: string[]; note?: string }
+    | { kind: "user"; steps: string[]; note?: string };
+  links: { live?: string; github?: string };
+};
+
+export const PROJECT_DETAILS: Record<string, ProjectDetail> = {
+  "rc-debugger": {
+    slug: "rc-debugger",
+    name: "rc-debugger",
+    tagline: "Terminal debugger & live monitor for Reactive Network cross-chain flows.",
+    icon: "⌁",
+    accent: "amber",
+    problem: "Debugging Reactive Smart Contracts is fragmented across multiple block explorers and origin/destination chains.",
+    mechanism: "Unifies the full lifecycle — origin event → RC react() → callback → destination tx — in one terminal view with revert decoding.",
+    outcome: "17 automated health diagnostics. One command tells you exactly which stage of an RC flow broke and why.",
+    tech: ["Node.js 18+", "TypeScript", "Viem", "Blessed (TUI)", "Reactive RPC", "Etherscan API"],
+    flow: [
+      { step: "Origin event",       detail: "Listens on the source chain for the trigger event." },
+      { step: "RC react()",         detail: "Decodes the Reactive Smart Contract execution + revert reasons." },
+      { step: "Callback",           detail: "Verifies the callback fired with the right payload." },
+      { step: "Destination tx",     detail: "Confirms execution on the target chain or surfaces failure." },
+    ],
+    howToUse: {
+      kind: "dev",
+      lang: "bash",
+      steps: [
+        "git clone https://github.com/harshkas4na/rc-debugger.git",
+        "cd rc-debugger && npm install && npm link",
+        "rc-debug init --rc 0xYourReactiveContract",
+        "rc-debug diagnose   # one-shot health check",
+        "rc-debug watch      # live cross-chain monitor",
+      ],
+    },
+    links: {
+      github: "https://github.com/harshkas4na/rc-debugger",
+    },
+  },
+
+  "walrus-sdk": {
+    slug: "walrus-sdk",
+    name: "Walrus-SDK",
+    tagline: "Type-safe TypeScript SDK for Walrus decentralized storage on Sui.",
+    icon: "🐋",
+    accent: "blue",
+    problem: "Walrus exposes raw HTTP Publisher/Aggregator endpoints — boilerplate, weak types, awkward error handling.",
+    mechanism: "A thin, type-safe wrapper over the Walrus HTTP API: upload, retrieve, and verify blobs with proper TS types.",
+    outcome: "Drop-in storage for AI datasets, NFT media, and encrypted user content — published on npm as `walrus-sdk`.",
+    tech: ["TypeScript", "Walrus HTTP API", "Sui", "npm"],
+    flow: [
+      { step: "Install",  detail: "Add walrus-sdk to any TS / Node project." },
+      { step: "Upload",   detail: "Pass a Buffer/file → returns a Walrus blob ID." },
+      { step: "Retrieve", detail: "Query the aggregator by blob ID to get bytes back." },
+    ],
+    howToUse: {
+      kind: "dev",
+      lang: "bash",
+      steps: [
+        "npm install walrus-sdk",
+        "// in your code:",
+        "import { WalrusClient } from 'walrus-sdk';",
+        "const client = new WalrusClient({ publisher, aggregator });",
+        "const { blobId } = await client.upload(fileBuffer);",
+        "const bytes = await client.retrieve(blobId);",
+      ],
+    },
+    links: {
+      live:   "https://walrus-sdk.vercel.app",
+    },
+  },
+
+  "provenance": {
+    slug: "provenance",
+    name: "Provenance",
+    tagline: "On-chain reputation scoring on Citrea — the first ZK-Rollup on Bitcoin.",
+    icon: "◈",
+    accent: "purple",
+    problem: "DeFi has identity verification but no behavioral trust signal — there's no answer to 'is this a good counterparty?'",
+    mechanism: "Tracks on-chain activity, scores it, and mints the result as a Soulbound Token (SBT) — a non-transferable reputation NFT.",
+    outcome: "A DeFi-native credit score on Citrea. Lenders, DAOs, and protocols can read trust without revealing identity.",
+    tech: ["Solidity", "Foundry", "Soulbound Tokens", "Citrea Testnet", "Next.js", "Express", "Ethers.js"],
+    flow: [
+      { step: "User actions",     detail: "Loans, repayments, governance votes, on-chain interactions." },
+      { step: "Backend relay",    detail: "Indexes events and computes score deltas." },
+      { step: "SBT contract",     detail: "Updates the user's non-transferable reputation NFT on Citrea." },
+      { step: "Score readable",   detail: "Any contract can query the SBT for trust-aware logic." },
+    ],
+    howToUse: {
+      kind: "user",
+      steps: [
+        "Open the live demo and connect a wallet on Citrea Testnet.",
+        "Trigger a few sample on-chain actions (provided in the UI).",
+        "Watch your Soulbound reputation score update in real time.",
+        "Inspect the SBT in your wallet — it's non-transferable by design.",
+      ],
+    },
+    links: {
+      live:   "https://provenance-jade.vercel.app",
+      github: "https://github.com/harshkas4na/Provenance",
+    },
+  },
+
+  "reactiveflow-lender": {
+    slug: "reactiveflow-lender",
+    name: "ReactiveFlow-Lender",
+    tagline: "Cross-chain lending: ETH collateral on Sepolia → MATIC loan on Kopli, no centralized bridge.",
+    icon: "⇄",
+    accent: "green",
+    problem: "Cross-chain lending typically routes through centralized bridges and custodians.",
+    mechanism: "Reactive Smart Contracts watch the deposit on Sepolia and autonomously issue the loan on Kopli — pure on-chain message passing.",
+    outcome: "Deposit ETH on one chain, receive MATIC on another, repay to release collateral. Zero off-chain operators.",
+    tech: ["Solidity", "Reactive Smart Contracts", "Sepolia", "Kopli", "Chainlink Oracle", "MetaMask"],
+    flow: [
+      { step: "Deposit ETH",        detail: "Lock collateral via depositCollateral() on Sepolia." },
+      { step: "RSC observes",       detail: "A Reactive Smart Contract sees the deposit event." },
+      { step: "MATIC issued",       detail: "Loan is automatically minted on Kopli to the same address." },
+      { step: "Repay & unlock",     detail: "repayLoan() on Kopli triggers collateral release on Sepolia." },
+    ],
+    howToUse: {
+      kind: "user",
+      steps: [
+        "Open the live demo and connect MetaMask on Sepolia.",
+        "Call depositCollateral() with an ETH amount — the UI handles the tx.",
+        "Switch your wallet to Kopli; the MATIC loan should already be there.",
+        "When ready, call repayLoan() on Kopli to release your ETH back on Sepolia.",
+      ],
+    },
+    links: {
+      live:   "https://reactive-flow-lender.vercel.app",
+      github: "https://github.com/harshkas4na/ReactiveFlow-Lender",
+    },
+  },
+
+  "protocol-pal": {
+    slug: "protocol-pal",
+    name: "Protocol-Pal",
+    tagline: "AI Web3 assistant that executes on-chain transactions from natural language.",
+    icon: "✦",
+    accent: "purple",
+    problem: "DEX UIs are dense — picking pairs, slippage, approvals, gas — every swap is a multi-step ordeal.",
+    mechanism: "An LLM agent (Gemini 2.5 Flash) parses your intent, plans the calls via MCP tools, and executes through Thirdweb / Ethers.",
+    outcome: "Type 'swap 0.01 ETH for USDC' — it routes via Uniswap V2 on Sepolia, handles approvals, and confirms back to you.",
+    tech: ["Next.js 16", "Gemini 2.5 Flash", "MCP", "Cloudflare Workers", "Vercel AI SDK", "Thirdweb", "Ethers.js", "Uniswap V2"],
+    flow: [
+      { step: "Natural language",  detail: "User types an intent in plain English." },
+      { step: "Intent parser",     detail: "Gemini extracts action, asset, amount, and routes the plan." },
+      { step: "MCP agent",         detail: "Tools approve tokens, build calldata, simulate the tx." },
+      { step: "On-chain execute",  detail: "Wallet signs once; the swap lands on Sepolia." },
+    ],
+    howToUse: {
+      kind: "user",
+      steps: [
+        "Open the demo and connect a wallet funded on Sepolia.",
+        "Type a command like: \"swap 0.01 ETH for USDC\".",
+        "Approve any required token allowance when the agent prompts.",
+        "Sign the swap — the agent confirms execution and shows the tx hash.",
+      ],
+    },
+    links: {
+      github: "https://github.com/harshkas4na/Protocol-Pal",
+    },
+  },
+
+  "swartz": {
+    slug: "swartz",
+    name: "SWARTZ",
+    tagline: "Decentralized social media with on-chain governance and ML content moderation.",
+    icon: "❖",
+    accent: "rose",
+    problem: "Centralized platforms own moderation, ranking, and identity. Users don't.",
+    mechanism: "Posts live on IPFS, identity is wallet-based, moderation runs on a TensorFlow LSTM, and rules are voted via reactive governance contracts.",
+    outcome: "A social platform where the community sets the rules — and an RSC enforces them across the network without a central admin.",
+    tech: ["Solidity", "Reactive Smart Contracts", "IPFS / Pinata", "TensorFlow", "Next.js", "Sepolia"],
+    flow: [
+      { step: "Post to IPFS",      detail: "Content is pinned via Pinata; only the CID hits the chain." },
+      { step: "ML moderation",     detail: "An LSTM scores text for harmful content client-side." },
+      { step: "Governance vote",   detail: "Token holders vote on policy changes." },
+      { step: "RSC enforces",      detail: "A Reactive Smart Contract applies the new policy automatically." },
+    ],
+    howToUse: {
+      kind: "user",
+      steps: [
+        "Connect a wallet on Sepolia.",
+        "Create a post — it's pinned to IPFS, the CID is stored on-chain.",
+        "Vote on a policy proposal with your governance tokens.",
+        "Watch the Reactive contract auto-apply the rule once the vote passes.",
+      ],
+    },
+    links: {
+      github: "https://github.com/harshkas4na/SWARTZ",
+    },
+  },
+
+  "fiducia": {
+    slug: "fiducia",
+    name: "Fiducia",
+    tagline: "Multi-party group wallets + crypto insurance with proportional rewards.",
+    icon: "◊",
+    accent: "blue",
+    problem: "Solo crypto positions are fragile. Groups want shared treasuries, but proportional voting and risk-sharing are hard to encode.",
+    mechanism: "Group wallets pool capital with on-chain proportional voting. Bolt-on insurance covers loan defaults, price drops, and threshold breaches.",
+    outcome: "Pool resources, share risk, and split rewards proportionally — all enforced by smart contracts, not trust.",
+    tech: ["Solidity", "Multi-sig patterns", "Insurance primitives", "Next.js", "Ethereum"],
+    flow: [
+      { step: "Create / join group",  detail: "Members deposit; share is proportional to contribution." },
+      { step: "Vote on actions",      detail: "Spending, allocation, and policy require quorum." },
+      { step: "Buy coverage",         detail: "Opt the group into insurance against specific risks." },
+      { step: "Claim & split",        detail: "Payouts and rewards distribute proportionally." },
+    ],
+    howToUse: {
+      kind: "user",
+      steps: [
+        "Open the live site and connect a wallet.",
+        "Create a group wallet or join one with an invite.",
+        "Deposit your share — voting power scales with contribution.",
+        "Opt into an insurance pool and propose group actions for vote.",
+      ],
+    },
+    links: {
+      live:   "https://fiducia-docs.vercel.app",
+      github: "https://github.com/harshkas4na/Fiducia",
+    },
+  },
+
+  "mercado": {
+    slug: "mercado",
+    name: "Mercado",
+    tagline: "NFT marketplace with constant-product dynamic pricing and the MERCAT token economy.",
+    icon: "✺",
+    accent: "amber",
+    problem: "NFT pricing is static, illiquid, and fragmented across geographies and marketplaces.",
+    mechanism: "Constant-product dynamic pricing (AMM-style) on every listing, plus the MERCAT token for fees, rewards, and governance.",
+    outcome: "Listings re-price as supply/demand shifts. Creators earn MERCAT on activity, not just primary sale.",
+    tech: ["Solidity", "Reactive Smart Contracts", "ERC1155", "ERC20 (MERCAT)", "OpenZeppelin", "Foundry", "React", "Spline 3D"],
+    flow: [
+      { step: "Mint / list",       detail: "Creators list ERC-1155 NFTs with a starting curve." },
+      { step: "Curve prices",      detail: "Constant-product math adjusts price per buy/sell." },
+      { step: "MERCAT rewards",    detail: "Activity (mints, trades) emits MERCAT to participants." },
+      { step: "Governance",        detail: "MERCAT holders vote on curves, fees, and listings." },
+    ],
+    howToUse: {
+      kind: "user",
+      steps: [
+        "Open the marketplace and connect a wallet.",
+        "Mint or list an NFT — set the starting bonding curve.",
+        "Buy or sell to see prices update along the constant-product curve.",
+        "Hold MERCAT to earn fees and vote on marketplace policy.",
+      ],
+    },
+    links: {
+      github: "https://github.com/harshkas4na/Mercado",
+    },
+  },
+
+  "cryptotree": {
+    slug: "cryptotree",
+    name: "CryptoTree",
+    tagline: "Interactive mind-map of the blockchain ecosystem — 12 pillars, fully navigable.",
+    icon: "❋",
+    accent: "green",
+    problem: "Crypto education is fragmented. Learners jump between L2s, MEV, oracles, governance — without seeing how it all connects.",
+    mechanism: "A 12-pillar mind-map (Cryptography, DeFi, MEV, L2s, Governance, …) where every node is explorable and progress is tracked.",
+    outcome: "Pick any pillar, drill into sub-topics, mark concepts as learned. A structured map of Web3, not a flat reading list.",
+    tech: ["React", "Interactive graph UI", "Keyboard navigation", "Progress tracking"],
+    flow: [
+      { step: "Pick a pillar",     detail: "Choose any of the 12 top-level domains." },
+      { step: "Drill in",          detail: "Each pillar opens a sub-graph of concepts." },
+      { step: "Mark learned",      detail: "Track 'X / Y learned' per branch as you go." },
+      { step: "Cross-link",        detail: "See how MEV connects to L2s, oracles to AMMs, etc." },
+    ],
+    howToUse: {
+      kind: "user",
+      steps: [
+        "Open the live site — no signup, no wallet.",
+        "Click any of the 12 pillar cards on the home view.",
+        "Use arrow keys / Enter to navigate, Space to mark a concept learned.",
+        "Use the search to jump to any topic by name.",
+      ],
+    },
+    links: {
+      live:   "https://crytpo-tree.vercel.app/",
+      github: "https://github.com/harshkas4na/CrytpoTree",
+    },
+  },
+
+  "reactive-network-dev": {
+    slug: "reactive-network-dev",
+    name: "reactive-network-dev",
+    tagline: "A Claude Code skill that teaches Claude to design Reactive Network systems.",
+    icon: "◐",
+    accent: "amber",
+    problem: "Reactive Smart Contracts have a steep learning curve — RC/CC two-contract architecture, cron topic hashes, gas quirks, deployment order.",
+    mechanism: "A Claude Code skill that loads canonical RC/CC patterns, 12 real-world gotchas, pre-computed cron hashes, and example protocols on demand.",
+    outcome: "Install once. Then ask Claude to scaffold a Reactive Network system — it picks correct patterns, avoids known gotchas, deploys cleanly.",
+    tech: ["Claude Code", "Solidity", "Foundry (forge / cast)", "Reactive Mainnet", "Lasna Testnet", "Reactscan"],
+    flow: [
+      { step: "Install skill",     detail: "Symlink it into ~/.claude/skills/." },
+      { step: "Start Claude",      detail: "Skill auto-loads when you mention Reactive Network." },
+      { step: "Describe goal",     detail: "Ask for a cross-chain system in plain English." },
+      { step: "Get RC + CC",       detail: "Claude scaffolds both contracts with deployment commands." },
+    ],
+    howToUse: {
+      kind: "dev",
+      lang: "bash",
+      note: "Five commands. After this, any new Claude Code session can design Reactive Network systems for you.",
+      steps: [
+        "git clone https://github.com/harshkas4na/reactive-network-dev.git",
+        "cd reactive-network-dev",
+        "mkdir -p ~/.claude/skills",
+        "ln -s \"$(pwd)/skills/reactive-network-dev\" ~/.claude/skills/reactive-network-dev",
+        "claude   # start a session and type / to verify the skill loaded",
+      ],
+    },
+    links: {
+      github: "https://github.com/harshkas4na/reactive-network-dev",
+    },
+  },
+};
 
 // ─── timeline ─────────────────────────────────────────────────────────────────
 export const TIMELINE = [

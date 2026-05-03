@@ -51,10 +51,34 @@ export const viewport: Viewport = {
   colorScheme: "dark",
 };
 
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Harsh Kasana",
+  url: "https://harshkasana.dev",
+  jobTitle: "Solidity & DApp Developer",
+  worksFor: { "@type": "Organization", name: "Reactive Network", url: "https://reactive.network" },
+  alumniOf: { "@type": "CollegeOrUniversity", name: "IIIT Nagpur" },
+  sameAs: [
+    "https://github.com/harshkas4na",
+    "https://x.com/0xkasana",
+    "https://www.linkedin.com/in/harsh-kasana-117288258/",
+    "https://medium.com/@harshkasana05",
+  ],
+  knowsAbout: [
+    "Solidity", "Smart Contracts", "DeFi", "Reactive Smart Contracts",
+    "Cross-chain protocols", "Next.js", "TypeScript",
+  ],
+};
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={inter.variable}>
       <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+        />
         {children}
         <Analytics />
         <SpeedInsights />
