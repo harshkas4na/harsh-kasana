@@ -6,7 +6,7 @@ import Image from "next/image";
 import {
   Github, Linkedin, Twitter, Mail, ExternalLink, ArrowUpRight,
   ChevronDown, MapPin, Briefcase, FileText, BookOpen, X, Menu, Wrench,
-  Quote, Target, Maximize2, Play, type LucideIcon,
+  Quote, Target, Maximize2, Play, Search, ArrowRight, type LucideIcon,
 } from "lucide-react";
 import {
   PROJECTS, MORE, TIMELINE, SKILLS, PRESS,
@@ -136,7 +136,7 @@ function Divider() { return <div style={{ height: 1, background: C.border }} />;
 
 // ─── nav ─────────────────────────────────────────────────────────────────────
 
-function Nav() {
+function Nav({ onOpenPalette }: { onOpenPalette?: () => void }) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -221,6 +221,25 @@ function Nav() {
             >
               <BookOpen size={14} /> writing
             </a>
+            {onOpenPalette && (
+              <button
+                onClick={onOpenPalette}
+                aria-label="Open command palette"
+                title="Search (⌘K)"
+                style={{
+                  display: "inline-flex", alignItems: "center", gap: 6,
+                  marginLeft: 6, padding: "5px 10px", borderRadius: 7,
+                  border: `1px solid ${C.border}`, background: "transparent",
+                  color: C.textSub, fontSize: 12, cursor: "pointer",
+                  fontFamily: "inherit", transition: "color 0.15s, border-color 0.15s",
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.color = C.text; e.currentTarget.style.borderColor = C.borderHover; }}
+                onMouseLeave={(e) => { e.currentTarget.style.color = C.textSub; e.currentTarget.style.borderColor = C.border; }}
+              >
+                <Search size={12} />
+                <kbd style={{ fontFamily: "ui-monospace, monospace", fontSize: 11, color: "inherit" }}>⌘K</kbd>
+              </button>
+            )}
           </div>
           <button ref={openBtnRef} className="show-mobile" onClick={() => setMenuOpen(true)}
             style={{ background: "none", border: `1px solid ${C.border}`, borderRadius: 7, padding: "6px 8px", cursor: "pointer", color: C.textSub, alignItems: "center", justifyContent: "center" }}
@@ -449,6 +468,7 @@ function ProjectCard({ p, i }: { p: Project; i: number }) {
     <Reveal delay={i * 0.07}>
       <div
         ref={cardRef}
+        id={`project-${p.id}`}
         onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
         className="project-card"
         style={{ background: hovered ? C.bgCardHover : C.bgCard, border: `1px solid ${hovered ? C.borderHover : C.border}`, borderRadius: 14, marginBottom: 14, transition: "background 0.15s, border-color 0.15s" }}
@@ -589,22 +609,22 @@ const SOCIAL_LINKS: SocialDef[] = [
   {
     Icon: Github, href: "https://github.com/harshkas4na", label: "GitHub", handle: "@harshkas4na",
     blurb: "Open-source DeFi protocols, Reactive Smart Contracts & dev tooling.",
-    preview: "/social-headers/github-header.png",
+    preview: "/social-headers/github-header.jpg",
   },
   {
     Icon: Linkedin, href: "https://www.linkedin.com/in/harsh-kasana-8b6a79258/", label: "LinkedIn", handle: "Harsh Kasana",
     blurb: "Solidity & DApp Developer · Reactive Network · IIIT Nagpur.",
-    preview: "/social-headers/linkedin-header.png",
+    preview: "/social-headers/linkedin-header.jpg",
   },
   {
     Icon: Twitter, href: "https://twitter.com/0xkasana", label: "Twitter", handle: "@0xkasana",
     blurb: "Building in public — DeFi, Reactive Smart Contracts, shipping notes.",
-    preview: "/social-headers/X-header.png",
+    preview: "/social-headers/X-header.jpg",
   },
   {
     Icon: BookOpen, href: "https://medium.com/@harshkasana05", label: "Medium", handle: "@harshkasana05",
     blurb: "Long-form writing on blockchain, DeFi systems & product thinking.",
-    preview: "/social-headers/medium-header.png",
+    preview: "/social-headers/medium-header.jpg",
   },
 ];
 
@@ -855,7 +875,7 @@ function HighlightsRail() {
           <Twitter size={13} /> @{X_STATS.handle}
         </a>
         <div style={{ position: "relative", width: "100%", aspectRatio: "16 / 11", marginTop: 10, borderRadius: 8, overflow: "hidden", border: `1px solid ${C.border}`, background: C.bgInset }}>
-          <Image src="/social-headers/X-analytics.png" alt="X analytics snapshot" fill sizes="248px" style={{ objectFit: "cover" }} />
+          <Image src="/social-headers/X-analytics.jpg" alt="X analytics snapshot" fill sizes="248px" style={{ objectFit: "cover" }} />
         </div>
         <div style={{ display: "flex", gap: 14, marginTop: 10 }}>
           <div>
@@ -911,7 +931,7 @@ function HighlightsRail() {
       <RailCard title={`Writing · ${ARTICLES.length}`}>
         <a href="https://medium.com/@harshkasana05" target="_blank" rel="noopener noreferrer"
           style={{ display: "block", position: "relative", width: "100%", aspectRatio: "21 / 10", marginBottom: 12, borderRadius: 8, overflow: "hidden", border: `1px solid ${C.border}`, background: C.bgInset }}>
-          <Image src="/social-headers/medium-header.png" alt="Medium profile banner" fill sizes="248px" style={{ objectFit: "cover" }} />
+          <Image src="/social-headers/medium-header.jpg" alt="Medium profile banner" fill sizes="248px" style={{ objectFit: "cover" }} />
         </a>
         {ARTICLES.length > 0 ? (
           <>
@@ -949,6 +969,206 @@ function HighlightsRail() {
   );
 }
 
+// ─── command palette ──────────────────────────────────────────────────────────
+
+type CmdItem = {
+  id: string;
+  label: string;
+  hint?: string;
+  group: "Navigate" | "Projects" | "Links";
+  Icon: LucideIcon;
+  keywords?: string;
+} & ({ kind: "anchor"; target: string } | { kind: "external"; href: string });
+
+function buildCmdItems(): CmdItem[] {
+  const sections: CmdItem[] = [
+    { id: "nav-top",      label: "Top",           group: "Navigate", Icon: ArrowRight,   kind: "anchor", target: "#top" },
+    { id: "nav-projects", label: "Projects",      group: "Navigate", Icon: ArrowRight,   kind: "anchor", target: "#projects" },
+    { id: "nav-about",    label: "About",         group: "Navigate", Icon: ArrowRight,   kind: "anchor", target: "#about" },
+    { id: "nav-journey",  label: "Journey",       group: "Navigate", Icon: ArrowRight,   kind: "anchor", target: "#journey" },
+    { id: "nav-contact",  label: "Contact",       group: "Navigate", Icon: ArrowRight,   kind: "anchor", target: "#contact" },
+  ];
+  const projects: CmdItem[] = PROJECTS.filter((p) => p.featured).map((p) => ({
+    id: `project-${p.id}`,
+    label: p.name,
+    hint: p.category,
+    keywords: `${p.category} ${p.tech.join(" ")}`,
+    group: "Projects",
+    Icon: ArrowRight,
+    kind: "anchor",
+    target: `#project-${p.id}`,
+  }));
+  const links: CmdItem[] = [
+    { id: "link-resume",   label: "Resume (PDF)",   hint: "/resume",                                      group: "Links", Icon: FileText, kind: "external", href: "/resume/HARSH_Resume.pdf" },
+    { id: "link-email",    label: "Email",          hint: "harshkasana05@gmail.com",                      group: "Links", Icon: Mail,     kind: "external", href: "mailto:harshkasana05@gmail.com" },
+    { id: "link-github",   label: "GitHub",         hint: "@harshkas4na",                                 group: "Links", Icon: Github,   kind: "external", href: "https://github.com/harshkas4na" },
+    { id: "link-x",        label: "X / Twitter",    hint: "@0xkasana",                                    group: "Links", Icon: Twitter,  kind: "external", href: "https://x.com/0xkasana" },
+    { id: "link-linkedin", label: "LinkedIn",       hint: "harsh-kasana",                                 group: "Links", Icon: Linkedin, kind: "external", href: "https://www.linkedin.com/in/harsh-kasana-117288258/" },
+    { id: "link-medium",   label: "Medium / Writing",hint: "@harshkasana05",                              group: "Links", Icon: BookOpen, kind: "external", href: "https://medium.com/@harshkasana05" },
+  ];
+  return [...sections, ...projects, ...links];
+}
+
+function CommandPalette({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const [query, setQuery] = useState("");
+  const [active, setActive] = useState(0);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const items = buildCmdItems();
+
+  const q = query.trim().toLowerCase();
+  const filtered = !q
+    ? items
+    : items.filter((it) =>
+        `${it.label} ${it.hint ?? ""} ${it.keywords ?? ""} ${it.group}`
+          .toLowerCase()
+          .includes(q)
+      );
+
+  useEffect(() => { setActive(0); }, [query, open]);
+
+  useEffect(() => {
+    if (!open) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    requestAnimationFrame(() => inputRef.current?.focus());
+    return () => { document.body.style.overflow = prevOverflow; };
+  }, [open]);
+
+  if (!open) return null;
+
+  const runItem = (it: CmdItem) => {
+    onClose();
+    if (it.kind === "external") {
+      window.open(it.href, it.href.startsWith("mailto:") || it.href.startsWith("/") ? "_self" : "_blank", "noopener,noreferrer");
+      return;
+    }
+    const id = it.target.replace(/^#/, "");
+    if (id === "top") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    else window.location.hash = it.target;
+  };
+
+  const onKey = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "Escape") { e.preventDefault(); onClose(); return; }
+    if (e.key === "ArrowDown") { e.preventDefault(); setActive((i) => Math.min(filtered.length - 1, i + 1)); return; }
+    if (e.key === "ArrowUp")   { e.preventDefault(); setActive((i) => Math.max(0, i - 1)); return; }
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const it = filtered[active];
+      if (it) runItem(it);
+    }
+  };
+
+  let lastGroup = "";
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Command palette"
+      onClick={onClose}
+      onKeyDown={onKey}
+      style={{
+        position: "fixed", inset: 0, zIndex: 90,
+        background: "rgba(8,8,8,0.72)", backdropFilter: "blur(6px)",
+        display: "flex", alignItems: "flex-start", justifyContent: "center",
+        padding: "clamp(48px, 12vh, 120px) 16px 16px",
+        animation: "fadeUp 0.16s ease both",
+      }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          width: "100%", maxWidth: 560, background: C.bgCard,
+          border: `1px solid ${C.border}`, borderRadius: 12,
+          boxShadow: "0 24px 64px rgba(0,0,0,0.6)", overflow: "hidden",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 14px", borderBottom: `1px solid ${C.border}` }}>
+          <Search size={16} color={C.textMuted} />
+          <input
+            ref={inputRef}
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search sections, projects, links…"
+            aria-label="Command palette search"
+            style={{
+              flex: 1, background: "transparent", border: "none", outline: "none",
+              color: C.text, fontSize: 15, fontFamily: "inherit",
+            }}
+          />
+          <kbd style={{ fontSize: 11, color: C.textMuted, fontFamily: "ui-monospace, monospace", padding: "2px 6px", border: `1px solid ${C.border}`, borderRadius: 4 }}>esc</kbd>
+        </div>
+
+        <div role="listbox" style={{ maxHeight: "min(60vh, 440px)", overflowY: "auto", padding: 6 }}>
+          {filtered.length === 0 && (
+            <div style={{ padding: "24px 12px", textAlign: "center", color: C.textMuted, fontSize: 13 }}>
+              No matches.
+            </div>
+          )}
+          {filtered.map((it, idx) => {
+            const isActive = idx === active;
+            const showGroup = it.group !== lastGroup;
+            lastGroup = it.group;
+            return (
+              <div key={it.id}>
+                {showGroup && (
+                  <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: C.textMuted, fontFamily: "ui-monospace, monospace", padding: "10px 10px 6px" }}>
+                    {it.group}
+                  </div>
+                )}
+                <button
+                  role="option"
+                  aria-selected={isActive}
+                  onMouseEnter={() => setActive(idx)}
+                  onClick={() => runItem(it)}
+                  style={{
+                    width: "100%", display: "flex", alignItems: "center", gap: 10,
+                    padding: "9px 10px", border: "none", borderRadius: 8,
+                    background: isActive ? C.bgInset : "transparent",
+                    color: C.text, fontFamily: "inherit", fontSize: 14, textAlign: "left",
+                    cursor: "pointer",
+                  }}
+                >
+                  <it.Icon size={14} color={isActive ? C.accent : C.textMuted} />
+                  <span style={{ flex: 1 }}>{it.label}</span>
+                  {it.hint && (
+                    <span style={{ fontSize: 11, color: C.textMuted, fontFamily: "ui-monospace, monospace" }}>{it.hint}</span>
+                  )}
+                </button>
+              </div>
+            );
+          })}
+        </div>
+
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 14px", borderTop: `1px solid ${C.border}`, fontSize: 11, color: C.textMuted, fontFamily: "ui-monospace, monospace" }}>
+          <span>↑↓ navigate · ↵ select</span>
+          <span>esc close</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function useCommandPalette(): { open: boolean; setOpen: (v: boolean) => void } {
+  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setOpen((v) => !v);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+  return { open, setOpen };
+}
+
 // ─── main ─────────────────────────────────────────────────────────────────────
 
 export default function Portfolio() {
@@ -956,10 +1176,12 @@ export default function Portfolio() {
   const px = "clamp(24px, 5vw, 56px)";
 
   const hasTestimonials = TESTIMONIALS.length > 0;
+  const palette = useCommandPalette();
 
   return (
-    <div style={{ background: C.bg, minHeight: "100vh", color: C.text }}>
-      <Nav />
+    <div id="top" style={{ background: C.bg, minHeight: "100vh", color: C.text }}>
+      <CommandPalette open={palette.open} onClose={() => palette.setOpen(false)} />
+      <Nav onOpenPalette={() => palette.setOpen(true)} />
       <div className="page-shell">
         <aside className="rail-left" aria-hidden="false">
           <SectionNav />
