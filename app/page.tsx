@@ -427,13 +427,21 @@ function ProjectCard({ p, i }: { p: Project; i: number }) {
         </div>
 
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-          <a href={p.live} target="_blank" rel="noopener noreferrer"
-            style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, padding: "7px 16px", borderRadius: 8, background: C.accent, color: "#0f0f0f", textDecoration: "none", fontWeight: 700, transition: "background 0.15s" }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = C.accentText)}
-            onMouseLeave={(e) => (e.currentTarget.style.background = C.accent)}
-          >
-            Live <ExternalLink size={12} />
-          </a>
+          {p.live ? (
+            <a href={p.live} target="_blank" rel="noopener noreferrer"
+              style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, padding: "7px 16px", borderRadius: 8, background: C.accent, color: "#0f0f0f", textDecoration: "none", fontWeight: 700, transition: "background 0.15s" }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = C.accentText)}
+              onMouseLeave={(e) => (e.currentTarget.style.background = C.accent)}
+            >
+              Live <ExternalLink size={12} />
+            </a>
+          ) : (
+            <span
+              style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, padding: "7px 16px", borderRadius: 8, background: C.accent, color: "#0f0f0f", fontWeight: 700 }}
+            >
+              Desktop App
+            </span>
+          )}
           {p.github && (
             <a href={p.github} target="_blank" rel="noopener noreferrer"
               style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, padding: "7px 16px", borderRadius: 8, border: `1px solid ${C.border}`, color: C.textSub, textDecoration: "none", fontWeight: 500, background: "transparent", transition: "border-color 0.15s, color 0.15s" }}

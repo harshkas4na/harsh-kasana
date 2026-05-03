@@ -34,7 +34,7 @@ export type Project = {
   badge: string;
   badgeColor: "green" | "blue" | "purple" | "orange";
   tech: string[];
-  live: string;
+  live: string | null;
   github: string | null;
   bullets: string[];
   metrics?: { value: string; label: string }[];
@@ -149,20 +149,21 @@ export const PROJECTS: Project[] = [
   {
     id: "focuclone",
     name: "FocuClone",
-    category: "Productivity", // TODO: confirm category
-    hook: "Desktop app for Auto Edit while recording with auto zoom in/out, cursor tracking, and more", // ← fill this in
-    badge: "Live",
+    category: "Desktop App",
+    hook: "A record → auto-edit → publish pipeline for creators whose main work isn't editing — it edits while you record.",
+    badge: "Desktop App",
     badgeColor: "blue",
-    tech: ["Next.js", "TypeScript"], // TODO: real stack
-    live: "#", // TODO: real URL
-    github: null, // TODO: github link
+    tech: ["Electron", "TypeScript", "Next.js"],
+    live: null,
+    github: "https://github.com/harshkas4na/FocuClone",
     image: "/hero-images/FocuClone-hero.jpeg",
     video: "/intro-videos/FocuClone-intro.mp4",
     featured: true,
     bullets: [
-      "TODO: bullet 1",
-      "TODO: bullet 2",
-      "TODO: bullet 3",
+      "Smooth auto zoom in/out that follows your cursor while recording",
+      "Auto-cuts unnecessary uhms, ahs, and silences from the timeline",
+      "Cursor tracking, auto captions, on-screen keyboard shortcuts, and spotlight effects",
+      "Improved PIP camera controls and voice enhancement for clean output",
     ],
     metrics: [],
   },
