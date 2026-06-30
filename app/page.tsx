@@ -1,19 +1,29 @@
 "use client";
 
-import { useState, useEffect, useRef, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import { useState, useEffect, useRef, createContext, useContext } from "react";
 import Image from "next/image";
 import {
   Github, Linkedin, Twitter, Mail, ExternalLink, ArrowUpRight,
   ChevronDown, MapPin, Briefcase, FileText, BookOpen, X, Menu, Wrench,
-  Quote, Target, Maximize2, Play, Search, ArrowRight, type LucideIcon,
+  Quote, Target, Maximize2, Play, Search, ArrowRight, Video, MessageSquare,
+  GraduationCap, type LucideIcon,
 } from "lucide-react";
 import {
   PROJECTS, MORE, TIMELINE, SKILL_PILLARS, SKILL_SUPPORT, PRESS,
-  TESTIMONIALS, LOOKING_FOR, applyPreset,
-  X_STATS, ARTICLES, PROJECT_HIGHLIGHTS,
-  type Project,
+  TESTIMONIALS, LOOKING_FOR, orderProjects,
+  X_STATS, ARTICLES, PROJECT_HIGHLIGHTS, TEACHING,
+  ROLES, DEFAULT_ROLE,
+  type Project, type RoleConfig, type RoleId,
 } from "./data";
+
+// ─── role context ──────────────────────────────────────────────────────────
+// Active role (web3 default / cloud) drives copy, project order, skill order
+// and which resume is served. Read from ?role= on mount, settable via toggle.
+type RoleState = { cfg: RoleConfig; role: RoleId; setRole: (r: RoleId) => void };
+const RoleCtx = createContext<RoleState>({
+  cfg: ROLES[DEFAULT_ROLE], role: DEFAULT_ROLE, setRole: () => {},
+});
+const useRole = () => useContext(RoleCtx);
 
 // ─── color tokens ─────────────────────────────────────────────────────────────
 const C = {
@@ -193,7 +203,7 @@ function Nav({ onOpenPalette }: { onOpenPalette?: () => void }) {
     };
   }, [menuOpen]);
 
-  const links = ["projects", "about", "journey"] as const;
+  const links = ["projects", "teaching", "about", "journey"] as const;
 
   return (
     <>
@@ -260,6 +270,7 @@ function Nav({ onOpenPalette }: { onOpenPalette?: () => void }) {
         {[
           { label: "how I build", href: "#how-i-build" },
           { label: "projects",    href: "#projects"    },
+          { label: "teaching",    href: "#teaching"    },
           { label: "about",       href: "#about"       },
           { label: "journey",     href: "#journey"     },
           { label: "writing",  href: "https://medium.com/@harshkasana05", external: true },
@@ -618,8 +629,8 @@ const SOCIAL_LINKS: SocialDef[] = [
     preview: "/social-headers/linkedin-header.jpg",
   },
   {
-    Icon: Twitter, href: "https://twitter.com/0xkasana", label: "Twitter", handle: "@0xkasana",
-    blurb: "Building in public — DeFi, Reactive Smart Contracts, shipping notes.",
+    Icon: Twitter, href: "https://x.com/0xkasana", label: "Twitter", handle: "@0xkasana",
+    blurb: "Building in public — Go, systems, DeFi & shipping notes.",
     preview: "/social-headers/X-header.jpg",
   },
   {
@@ -667,21 +678,60 @@ function SocialLink({ Icon, href, label, handle, blurb, preview }: SocialDef) {
   );
 }
 
+// ─── role toggle ───────────────────────────────────────────────────────────
+
+function RoleToggle({ role, setRole }: { role: RoleId; setRole: (r: RoleId) => void }) {
+  const ids = Object.keys(ROLES) as RoleId[];
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20, flexWrap: "wrap" }}>
+      <span style={{ fontSize: 11, color: C.textMuted, fontFamily: "ui-monospace, monospace", letterSpacing: "0.1em", textTransform: "uppercase" }}>
+        Viewing as
+      </span>
+      <div role="tablist" aria-label="Choose role view" style={{ display: "inline-flex", padding: 3, background: C.bgInset, border: `1px solid ${C.border}`, borderRadius: 9, gap: 2 }}>
+        {ids.map((id) => {
+          const active = id === role;
+          return (
+            <button
+              key={id}
+              role="tab"
+              aria-selected={active}
+              onClick={() => setRole(id)}
+              style={{
+                fontSize: 12, fontWeight: 600, fontFamily: "inherit", cursor: "pointer",
+                padding: "5px 12px", borderRadius: 7, border: "none",
+                background: active ? C.accent : "transparent",
+                color: active ? "#0f0f0f" : C.textSub,
+                transition: "background 0.15s, color 0.15s",
+              }}
+            >
+              {ROLES[id].toggleLabel}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 // ─── hero ────────────────────────────────────────────────────────────────────
 
 function Hero({ px, W }: { px: string; W: number }) {
+  const { cfg, role, setRole } = useRole();
   return (
     <section style={{ maxWidth: W, margin: "0 auto", padding: `clamp(48px, 9vh, 96px) ${px} clamp(36px, 6vh, 56px)`, animation: "fadeUp 0.5s ease both" }}>
+
+      {/* role toggle */}
+      <RoleToggle role={role} setRole={setRole} />
 
       {/* status pills */}
       <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 32 }}>
         <div style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "5px 12px 5px 9px", background: "rgba(34,197,94,0.1)", border: "1px solid rgba(34,197,94,0.25)", borderRadius: 20 }}>
           <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#22c55e", display: "inline-block", animation: "pulse-dot 2s ease-in-out infinite" }} />
-          <span style={{ fontSize: 12, color: "#5fdd96", fontWeight: 600 }}>Available — June 2026</span>
+          <span style={{ fontSize: 12, color: "#5fdd96", fontWeight: 600 }}>Available now</span>
         </div>
         <div style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "5px 12px 5px 9px", background: C.accentBg, border: `1px solid ${C.accentBorder}`, borderRadius: 20 }}>
           <Wrench size={12} style={{ color: C.accent }} />
-          <span style={{ fontSize: 12, color: C.accent, fontWeight: 600 }}>Now building: Liquidation Protection · ReacDEFI</span>
+          <span style={{ fontSize: 12, color: C.accent, fontWeight: 600 }}>{cfg.heroStatusPill}</span>
         </div>
       </div>
 
@@ -707,7 +757,7 @@ style={{
           <div style={{ display: "flex", alignItems: "center", gap: 18, marginBottom: 16, flexWrap: "wrap" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 6, color: C.textSub, fontSize: 14 }}>
               <Briefcase size={13} />
-              <span>Solidity & DApp Developer @{" "}<span style={{ color: C.accent, fontWeight: 600 }}>Reactive Network</span></span>
+              <span>{cfg.heroRole}{" "}<span style={{ color: C.accent, fontWeight: 600 }}>· ex-Reactive Network</span></span>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 6, color: C.textMuted, fontSize: 13 }}>
               <MapPin size={12} />
@@ -717,15 +767,12 @@ style={{
 
           {/* primary value prop — what readers should see first */}
           <p style={{ color: C.text, fontSize: "clamp(15px, 4vw, 17px)", lineHeight: 1.65, margin: "0 0 14px", maxWidth: "min(600px, 100%)", fontWeight: 500, letterSpacing: "-0.005em" }}>
-            I ship DeFi products end-to-end — ideation to production.{" "}
-            <span style={{ color: C.textSub, fontWeight: 400 }}>Taste over tooling.</span>
+            {cfg.heroValueProp.lead}{" "}
+            <span style={{ color: C.textSub, fontWeight: 400 }}>{cfg.heroValueProp.sub}</span>
           </p>
 
           <p style={{ color: C.textMuted, fontSize: 14, lineHeight: 1.65, margin: 0, maxWidth: "min(600px, 100%)" }}>
-            Building DeFi infrastructure at{" "}
-            <a href="https://reactive.network" target="_blank" rel="noopener noreferrer" style={{ color: C.textSub, fontWeight: 500, textDecoration: "underline", textDecorationColor: C.border, textUnderlineOffset: 3 }}>
-              Reactive Network
-            </a>. Final-year B.Tech at IIIT Nagpur.
+            {cfg.heroSubtext}
           </p>
         </div>
       </div>
@@ -747,7 +794,7 @@ style={{
 
       {/* CTAs */}
       <div style={{ display: "flex", flexWrap: "wrap", gap: 10, alignItems: "center", marginBottom: 22 }}>
-        <a href="/resume/HARSH_Resume.pdf" target="_blank" rel="noopener noreferrer"
+        <a href={cfg.resumeHref} target="_blank" rel="noopener noreferrer"
           style={{ display: "inline-flex", alignItems: "center", gap: 7, fontSize: 14, fontWeight: 700, color: "#0f0f0f", textDecoration: "none", padding: "10px 20px", borderRadius: 9, background: C.accent, transition: "background 0.15s" }}
           onMouseEnter={(e) => (e.currentTarget.style.background = C.accentText)}
           onMouseLeave={(e) => (e.currentTarget.style.background = C.accent)}
@@ -774,20 +821,17 @@ style={{
 // ─── projects (preset-aware) ─────────────────────────────────────────────────
 
 function ProjectsSection() {
-  const params = useSearchParams();
-  const preset = params?.get("preset");
-  const featured = applyPreset(preset);
+  const { cfg } = useRole();
+  const featured = orderProjects(cfg.projectOrder);
 
   return (
     <>
       <Reveal>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: 12, marginBottom: 24 }}>
           <SectionLabel>Selected Projects</SectionLabel>
-          {preset && (
-            <span style={{ fontSize: 11, color: C.accent, fontFamily: "ui-monospace, monospace", letterSpacing: "0.08em", textTransform: "uppercase" }}>
-              preset: {preset}
-            </span>
-          )}
+          <span style={{ fontSize: 11, color: C.accent, fontFamily: "ui-monospace, monospace", letterSpacing: "0.08em", textTransform: "uppercase" }}>
+            {cfg.toggleLabel}
+          </span>
         </div>
       </Reveal>
       {featured.map((p, i) => <ProjectCard key={p.id} p={p} i={i} />)}
@@ -800,6 +844,7 @@ function ProjectsSection() {
 const RAIL_SECTIONS = [
   { id: "how-i-build", label: "How I Build" },
   { id: "projects",    label: "Projects" },
+  { id: "teaching",    label: "Teaching" },
   { id: "about",       label: "About" },
   { id: "journey",     label: "Journey" },
   { id: "contact",     label: "Contact" },
@@ -808,6 +853,7 @@ const RAIL_IDS = RAIL_SECTIONS.map((s) => s.id);
 
 function SectionNav() {
   const active = useActiveSection(RAIL_IDS);
+  const { cfg } = useRole();
   return (
     <nav aria-label="Page sections" className="rail-nav">
       <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: C.textMuted, fontFamily: "ui-monospace, monospace", margin: "0 0 14px 14px" }}>
@@ -836,7 +882,7 @@ function SectionNav() {
           Quick links
         </p>
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          <a href="/resume/HARSH_Resume.pdf" target="_blank" rel="noopener noreferrer"
+          <a href={cfg.resumeHref} target="_blank" rel="noopener noreferrer"
             style={{ fontSize: 12, color: C.textSub, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 7 }}>
             <FileText size={12} /> Resume
           </a>
@@ -877,7 +923,7 @@ function HighlightsRail() {
           <Twitter size={13} /> @{X_STATS.handle}
         </a>
         <div style={{ position: "relative", width: "100%", aspectRatio: "16 / 11", marginTop: 10, borderRadius: 8, overflow: "hidden", border: `1px solid ${C.border}`, background: C.bgInset }}>
-          <Image src="/social-headers/X-analytics.jpg" alt="X analytics snapshot" fill sizes="248px" style={{ objectFit: "cover" }} />
+          <Image src="/social-headers/X-analytics.png" alt="X analytics snapshot" fill sizes="248px" style={{ objectFit: "cover" }} />
         </div>
         <div style={{ display: "flex", gap: 14, marginTop: 10 }}>
           <div>
@@ -982,11 +1028,12 @@ type CmdItem = {
   keywords?: string;
 } & ({ kind: "anchor"; target: string } | { kind: "external"; href: string });
 
-function buildCmdItems(): CmdItem[] {
+function buildCmdItems(resumeHref: string): CmdItem[] {
   const sections: CmdItem[] = [
     { id: "nav-top",         label: "Top",          group: "Navigate", Icon: ArrowRight, kind: "anchor", target: "#top" },
     { id: "nav-how-i-build", label: "How I Build",  group: "Navigate", Icon: ArrowRight, kind: "anchor", target: "#how-i-build" },
     { id: "nav-projects",    label: "Projects",     group: "Navigate", Icon: ArrowRight, kind: "anchor", target: "#projects" },
+    { id: "nav-teaching", label: "Teaching",      group: "Navigate", Icon: ArrowRight,   kind: "anchor", target: "#teaching" },
     { id: "nav-about",    label: "About",         group: "Navigate", Icon: ArrowRight,   kind: "anchor", target: "#about" },
     { id: "nav-journey",  label: "Journey",       group: "Navigate", Icon: ArrowRight,   kind: "anchor", target: "#journey" },
     { id: "nav-contact",  label: "Contact",       group: "Navigate", Icon: ArrowRight,   kind: "anchor", target: "#contact" },
@@ -1002,11 +1049,11 @@ function buildCmdItems(): CmdItem[] {
     target: `#project-${p.id}`,
   }));
   const links: CmdItem[] = [
-    { id: "link-resume",   label: "Resume (PDF)",   hint: "/resume",                                      group: "Links", Icon: FileText, kind: "external", href: "/resume/HARSH_Resume.pdf" },
+    { id: "link-resume",   label: "Resume (PDF)",   hint: "/resume",                                      group: "Links", Icon: FileText, kind: "external", href: resumeHref },
     { id: "link-email",    label: "Email",          hint: "harshkasana05@gmail.com",                      group: "Links", Icon: Mail,     kind: "external", href: "mailto:harshkasana05@gmail.com" },
     { id: "link-github",   label: "GitHub",         hint: "@harshkas4na",                                 group: "Links", Icon: Github,   kind: "external", href: "https://github.com/harshkas4na" },
     { id: "link-x",        label: "X / Twitter",    hint: "@0xkasana",                                    group: "Links", Icon: Twitter,  kind: "external", href: "https://x.com/0xkasana" },
-    { id: "link-linkedin", label: "LinkedIn",       hint: "harsh-kasana",                                 group: "Links", Icon: Linkedin, kind: "external", href: "https://www.linkedin.com/in/harsh-kasana-117288258/" },
+    { id: "link-linkedin", label: "LinkedIn",       hint: "harsh-kasana",                                 group: "Links", Icon: Linkedin, kind: "external", href: "https://www.linkedin.com/in/harsh-kasana-8b6a79258/" },
     { id: "link-medium",   label: "Medium / Writing",hint: "@harshkasana05",                              group: "Links", Icon: BookOpen, kind: "external", href: "https://medium.com/@harshkasana05" },
   ];
   return [...sections, ...projects, ...links];
@@ -1016,7 +1063,8 @@ function CommandPalette({ open, onClose }: { open: boolean; onClose: () => void 
   const [query, setQuery] = useState("");
   const [active, setActive] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
-  const items = buildCmdItems();
+  const { cfg } = useRole();
+  const items = buildCmdItems(cfg.resumeHref);
 
   const q = query.trim().toLowerCase();
   const filtered = !q
@@ -1181,7 +1229,22 @@ export default function Portfolio() {
   const hasTestimonials = TESTIMONIALS.length > 0;
   const palette = useCommandPalette();
 
+  // Active role: default web3, hydrated from ?role= on mount, toggle updates URL.
+  const [role, setRoleState] = useState<RoleId>(DEFAULT_ROLE);
+  useEffect(() => {
+    const r = new URLSearchParams(window.location.search).get("role");
+    if (r === "web3" || r === "cloud") setRoleState(r);
+  }, []);
+  const setRole = (r: RoleId) => {
+    setRoleState(r);
+    const url = new URL(window.location.href);
+    url.searchParams.set("role", r);
+    window.history.replaceState(null, "", url.toString());
+  };
+  const cfg = ROLES[role];
+
   return (
+    <RoleCtx.Provider value={{ cfg, role, setRole }}>
     <div id="top" style={{ background: C.bg, minHeight: "100vh", color: C.text }}>
       <CommandPalette open={palette.open} onClose={() => palette.setOpen(false)} />
       <Nav onOpenPalette={() => palette.setOpen(true)} />
@@ -1267,9 +1330,7 @@ export default function Portfolio() {
 
       {/* ── projects ── */}
       <section id="projects" style={{ maxWidth: W, margin: "0 auto", padding: `48px ${px}` }}>
-        <Suspense fallback={<SectionLabel>Selected Projects</SectionLabel>}>
-          <ProjectsSection />
-        </Suspense>
+        <ProjectsSection />
       </section>
 
       {/* ── more projects ── */}
@@ -1295,6 +1356,45 @@ export default function Portfolio() {
             </Reveal>
           ))}
         </div>
+      </section>
+
+      <Divider />
+
+      {/* ── teaching / building in public ── */}
+      <section id="teaching" style={{ maxWidth: W, margin: "0 auto", padding: `48px ${px}` }}>
+        <Reveal><SectionLabel>Teaching · Building in Public</SectionLabel></Reveal>
+        <Reveal delay={0.05}>
+          <p style={{ color: C.textSub, fontSize: 16, lineHeight: 1.7, margin: "0 0 28px", maxWidth: 640 }}>
+            I learn hard systems by rebuilding them, then explain what I found — in videos and technical threads.
+          </p>
+        </Reveal>
+        <div className="more-grid">
+          {TEACHING.map((t, i) => (
+            <Reveal key={t.title} delay={0.07 + i * 0.05}>
+              <a href={t.url} target="_blank" rel="noopener noreferrer"
+                style={{ display: "block", height: "100%", padding: "16px 18px", borderRadius: 10, border: `1px solid ${C.border}`, background: C.bgCard, textDecoration: "none", transition: "all 0.15s" }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = C.bgCardHover; e.currentTarget.style.borderColor = C.borderHover; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = C.bgCard; e.currentTarget.style.borderColor = C.border; }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 9 }}>
+                  <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 26, height: 26, borderRadius: 7, background: C.accentBg, border: `1px solid ${C.accentBorder}`, color: C.accent, flexShrink: 0 }}>
+                    {t.kind === "video" ? <Video size={14} /> : <MessageSquare size={14} />}
+                  </span>
+                  <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: C.textMuted, fontFamily: "ui-monospace, monospace" }}>{t.meta}</span>
+                  <ArrowUpRight size={13} style={{ color: C.textMuted, marginLeft: "auto" }} />
+                </div>
+                <p style={{ fontSize: 14, fontWeight: 600, color: C.text, margin: "0 0 6px", lineHeight: 1.4 }}>{t.title}</p>
+                <p style={{ fontSize: 13, color: C.textMuted, margin: 0, lineHeight: 1.55 }}>{t.blurb}</p>
+              </a>
+            </Reveal>
+          ))}
+        </div>
+        <Reveal delay={0.2}>
+          <a href={X_STATS.url} target="_blank" rel="noopener noreferrer"
+            style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 12, color: C.accent, textDecoration: "none", marginTop: 18, fontFamily: "ui-monospace, monospace", letterSpacing: "0.06em" }}>
+            <GraduationCap size={13} /> More on X · @{X_STATS.handle} <ArrowUpRight size={11} />
+          </a>
+        </Reveal>
       </section>
 
       <Divider />
@@ -1327,32 +1427,32 @@ export default function Portfolio() {
         <div style={{ maxWidth: 660 }}>
           <Reveal delay={0.07}>
             <p style={{ color: C.textSub, fontSize: 15, lineHeight: 1.85, marginBottom: 18 }}>
-              I&apos;m a Solidity & DApp Developer at{" "}
-              <a href="https://reactive.network" target="_blank" rel="noopener noreferrer" style={{ color: C.text, fontWeight: 600, textDecoration: "underline", textDecorationColor: C.border, textUnderlineOffset: 3 }}>
-                Reactive Network
-              </a>{" "}
-              and a final-year B.Tech (ECE) student at IIIT Nagpur (CGPA 8.37). My focus: Reactive Smart Contracts, cross-chain architecture, and making blockchain accessible to non-technical users.
+              {cfg.aboutLead}
             </p>
             <p style={{ color: C.textSub, fontSize: 15, lineHeight: 1.85, marginBottom: 28 }}>
-              I write about blockchain, DeFi systems, and product thinking on{" "}
+              I write on{" "}
               <a href="https://medium.com/@harshkasana05" target="_blank" rel="noopener noreferrer" style={{ color: C.accent, fontWeight: 600, textDecoration: "underline", textDecorationColor: C.accentBorder, textUnderlineOffset: 3 }}>
                 Medium
-              </a>
-              . My work spans no-code DeFi platforms, AI agents that autonomously manage on-chain positions, NFT royalty enforcement, and developer tooling for Reactive Network.
+              </a>{" "}
+              and teach through technical videos and threads — system design, Git internals, Next.js rendering. My work spans no-code DeFi platforms, AI agents, developer tooling, and now Go + cloud infrastructure.
             </p>
           </Reveal>
           <Reveal delay={0.12}>
             <p style={{ fontSize: 11, fontWeight: 700, color: C.textMuted, letterSpacing: "0.14em", textTransform: "uppercase", fontFamily: "ui-monospace, monospace", marginBottom: 14 }}>Where I focus</p>
             <div style={{ display: "flex", flexDirection: "column", gap: 14, marginBottom: 22 }}>
-              {SKILL_PILLARS.map((p) => (
-                <div key={p.title} style={{ background: C.bgCard, border: `1px solid ${C.border}`, borderRadius: 10, padding: "14px 16px" }}>
-                  <p style={{ fontSize: 14, fontWeight: 700, color: C.text, margin: 0, letterSpacing: "-0.01em" }}>{p.title}</p>
-                  <p style={{ fontSize: 13, color: C.textSub, lineHeight: 1.6, margin: "4px 0 10px" }}>{p.line}</p>
-                  <p style={{ fontSize: 12, color: C.textMuted, fontFamily: "ui-monospace, monospace", letterSpacing: "0.02em", margin: 0 }}>
-                    {p.tools.join(" · ")}
-                  </p>
-                </div>
-              ))}
+              {cfg.pillarOrder.map((title) => {
+                const p = SKILL_PILLARS.find((x) => x.title === title);
+                if (!p) return null;
+                return (
+                  <div key={p.title} style={{ background: C.bgCard, border: `1px solid ${C.border}`, borderRadius: 10, padding: "14px 16px" }}>
+                    <p style={{ fontSize: 14, fontWeight: 700, color: C.text, margin: 0, letterSpacing: "-0.01em" }}>{p.title}</p>
+                    <p style={{ fontSize: 13, color: C.textSub, lineHeight: 1.6, margin: "4px 0 10px" }}>{p.line}</p>
+                    <p style={{ fontSize: 12, color: C.textMuted, fontFamily: "ui-monospace, monospace", letterSpacing: "0.02em", margin: 0 }}>
+                      {p.tools.join(" · ")}
+                    </p>
+                  </div>
+                );
+              })}
             </div>
             <p style={{ fontSize: 12, color: C.textMuted, fontFamily: "ui-monospace, monospace", letterSpacing: "0.02em", margin: 0, lineHeight: 1.7 }}>
               <span style={{ textTransform: "uppercase", letterSpacing: "0.12em", marginRight: 8 }}>also fluent in</span>
@@ -1370,7 +1470,7 @@ export default function Portfolio() {
         <Reveal delay={0.05}>
           <div className="lf-grid" style={{ marginBottom: 18 }}>
             {[
-              { label: "Roles",     value: LOOKING_FOR.roles.join(" · ") },
+              { label: "Roles",     value: cfg.lookingForRoles.join(" · ") },
               { label: "Stage",     value: LOOKING_FOR.stage },
               { label: "Location",  value: LOOKING_FOR.location },
               { label: "Available", value: LOOKING_FOR.available },
@@ -1423,7 +1523,7 @@ export default function Portfolio() {
           <div style={{ background: C.bgCard, border: `1px solid ${C.border}`, borderRadius: 14, padding: "32px 36px", marginBottom: 32, maxWidth: 600 }}>
             <p style={{ fontSize: 20, fontWeight: 700, color: C.text, marginBottom: 10, letterSpacing: "-0.02em" }}>Let&apos;s work together</p>
             <p style={{ fontSize: 15, color: C.textSub, lineHeight: 1.75, marginBottom: 22 }}>
-              Open to Solidity, full-stack Web3, and DeFi protocol roles. If you need someone who can own the full stack — ideation to production — reach out.
+              {cfg.footerBlurb}
             </p>
             <a href="mailto:harshkasana05@gmail.com"
               style={{ display: "inline-flex", alignItems: "center", gap: 7, fontSize: 14, fontWeight: 700, color: "#0f0f0f", textDecoration: "none", padding: "10px 20px", borderRadius: 9, background: C.accent, transition: "background 0.15s" }}
@@ -1440,7 +1540,7 @@ export default function Portfolio() {
               {[
                 { Icon: Github,   href: "https://github.com/harshkas4na" },
                 { Icon: Linkedin, href: "https://www.linkedin.com/in/harsh-kasana-8b6a79258/" },
-                { Icon: Twitter,  href: "https://twitter.com/0xkasana" },
+                { Icon: Twitter,  href: "https://x.com/0xkasana" },
                 { Icon: BookOpen, href: "https://medium.com/@harshkasana05" },
               ].map(({ Icon, href }) => (
                 <a key={href} href={href} target="_blank" rel="noopener noreferrer"
@@ -1461,5 +1561,6 @@ export default function Portfolio() {
         </aside>
       </div>
     </div>
+    </RoleCtx.Provider>
   );
 }

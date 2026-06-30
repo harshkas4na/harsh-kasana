@@ -195,6 +195,66 @@ export const PROJECTS: Project[] = [
       { value: "$1.8B", label: "addressable problem" },
     ],
   },
+  {
+    id: "go-server",
+    name: "go-server",
+    category: "Backend",
+    hook: "A containerized Go HTTP API with PostgreSQL — built to learn production backend internals by implementing, not following tutorials.",
+    badge: "Building",
+    badgeColor: "blue",
+    tech: ["Go", "Docker", "docker-compose", "PostgreSQL"],
+    live: null,
+    github: "https://github.com/harshkas4na/go-server",
+    image: null,
+    video: null,
+    featured: false, // surfaced in the cloud role order
+    bullets: [
+      "A Go HTTP server backed by PostgreSQL, fully containerized with Docker + docker-compose and SQL schema init.",
+      "Built to internalize backend fundamentals — routing, DB access, container orchestration — by building rather than watching.",
+      "Part of a deliberate move into Go and cloud infrastructure.",
+    ],
+    metrics: [],
+  },
+  {
+    id: "light-tf",
+    name: "light-tf",
+    category: "DevTools / IaC",
+    hook: "A Terraform-style infrastructure engine, rebuilt from scratch in Go.",
+    badge: "Building",
+    badgeColor: "purple",
+    tech: ["Go", "IaC", "DFS / topological sort", "Goroutines", "gRPC (planned)", "AWS SDK (planned)"],
+    live: null,
+    github: "https://github.com/harshkas4na/light-tf",
+    image: null,
+    video: null,
+    featured: false, // surfaced in the cloud role order
+    bullets: [
+      "Resolves resource dependency graphs with a recursive DFS — topological ordering plus cycle detection (visited / visiting / unvisited states).",
+      "Designed for concurrent creation of independent resources via goroutines + channels, and a gRPC plugin interface mirroring real Terraform providers.",
+      "Runs against a mock provider today; AWS Go SDK integration planned once the core is solid.",
+    ],
+    metrics: [],
+  },
+  {
+    id: "mygit",
+    name: "mygit",
+    category: "Systems / Go",
+    hook: "Git, rebuilt from scratch in Go — to understand the object model from the inside out.",
+    badge: "Building",
+    badgeColor: "orange",
+    tech: ["Go", "Git internals", "Content-addressable storage", "CLI"],
+    live: null,
+    github: "https://github.com/harshkas4na/mygit",
+    image: null,
+    video: null,
+    featured: false, // surfaced in the cloud role order
+    bullets: [
+      "Reimplements Git's core object model — blobs, trees, and commits in a content-addressable store keyed by hash.",
+      "Plumbing commands built from first principles to internalize how Git actually stores and tracks history.",
+      "The basis for my breakdown video on how Git really works under the hood.",
+    ],
+    metrics: [],
+  },
 ];
 
 // FEATURED is computed once — order in PROJECTS is the default order.
@@ -212,9 +272,84 @@ export const PRESETS: Record<string, string[]> = {
 
 export function applyPreset(preset?: string | null): Project[] {
   if (!preset || !PRESETS[preset]) return FEATURED;
-  const order = PRESETS[preset];
+  return orderProjects(PRESETS[preset]);
+}
+
+// Order PROJECTS by an explicit list of ids (unknown ids dropped).
+export function orderProjects(ids: string[]): Project[] {
   const map = new Map(PROJECTS.map((p) => [p.id, p]));
-  return order.map((id) => map.get(id)).filter((p): p is Project => Boolean(p));
+  return ids.map((id) => map.get(id)).filter((p): p is Project => Boolean(p));
+}
+
+// ─── roles ───────────────────────────────────────────────────────────────────
+// The portfolio speaks to two audiences. `?role=web3` (default) keeps the proven
+// DeFi framing; `?role=cloud` reframes the same person as a backend/full-stack
+// engineer going deep on Go + cloud infra. A small in-hero toggle switches it,
+// and each role serves its own resume. web3 copy intentionally matches the
+// pre-role default so nothing changes for the default visitor.
+export type RoleId = "web3" | "cloud";
+export const DEFAULT_ROLE: RoleId = "web3";
+
+export type RoleConfig = {
+  id: RoleId;
+  toggleLabel: string;
+  heroRole: string;            // briefcase line under the name
+  heroStatusPill: string;      // the "now / recently" pill
+  heroValueProp: { lead: string; sub: string };
+  heroSubtext: string;
+  aboutLead: string;           // first About paragraph
+  lookingForRoles: string[];
+  footerBlurb: string;
+  resumeHref: string;
+  projectOrder: string[];      // PROJECTS ids, in display order
+  pillarOrder: string[];       // SKILL_PILLARS titles, in display order
+};
+
+export const ROLES: Record<RoleId, RoleConfig> = {
+  web3: {
+    id: "web3",
+    toggleLabel: "Web3 / DeFi",
+    heroRole: "Full-Stack & Smart Contract Engineer",
+    heroStatusPill: "Recently shipped: ReacDEFI · Reactive Network",
+    heroValueProp: {
+      lead: "I ship DeFi products end-to-end — ideation to production.",
+      sub: "Taste over tooling.",
+    },
+    heroSubtext:
+      "Built DeFi infrastructure at Reactive Network. Final-year B.Tech at IIIT Nagpur.",
+    aboutLead:
+      "I'm a Full-Stack & Smart Contract Engineer. At Reactive Network I shipped production DeFi — Reactive Smart Contracts, cross-chain architecture, and tooling that makes blockchain usable by non-technical people. I'm now building independently while finishing my B.Tech (ECE) at IIIT Nagpur (CGPA 8.37).",
+    lookingForRoles: ["Smart Contract / Solidity Engineer", "Full-Stack Web3", "DeFi Protocol Engineer"],
+    footerBlurb:
+      "Open to Smart Contract, full-stack Web3, and DeFi protocol roles. If you need someone who can own the full stack — ideation to production — reach out.",
+    resumeHref: "/resume/HARSH_Resume.pdf",
+    projectOrder: ["reactor", "hashtro", "rc-agents", "metrodiaries", "focuclone"],
+    pillarOrder: ["Smart Contracts", "Full-Stack Product", "AI Integration"],
+  },
+  cloud: {
+    id: "cloud",
+    toggleLabel: "Backend / Cloud",
+    heroRole: "Full-Stack & Backend Engineer",
+    heroStatusPill: "Now building: light-tf — a Terraform engine in Go",
+    heroValueProp: {
+      lead: "Full-stack engineer who ships end-to-end — now going deep on Go and cloud infrastructure.",
+      sub: "I learn hard systems by rebuilding them.",
+    },
+    heroSubtext:
+      "Backend & full-stack engineer expanding into Go and cloud infra. Previously shipped production DeFi at Reactive Network. Final-year B.Tech at IIIT Nagpur.",
+    aboutLead:
+      "I'm a full-stack & backend engineer going deep on Go and cloud infrastructure. I learn systems by rebuilding them from scratch — a Terraform-style IaC engine (light-tf), Git, and containerized Go services — then teach what I learn. Before this I shipped production DeFi at Reactive Network as a DApp developer, Forward Deployed Engineer, and video creator.",
+    lookingForRoles: ["Backend Engineer", "Full-Stack Engineer", "Platform / Infra Engineer"],
+    footerBlurb:
+      "Open to backend, full-stack, and platform/infra roles. I learn hard systems by building them — and I ship. If that's your kind of engineer, reach out.",
+    resumeHref: "/resume/HARSH_Resume_Backend.pdf",
+    projectOrder: ["light-tf", "go-server", "mygit", "metrodiaries", "hashtro", "reactor", "rc-agents"],
+    pillarOrder: ["Backend & Cloud Infra", "Full-Stack Product", "Smart Contracts"],
+  },
+};
+
+export function resolveRole(role?: string | null): RoleConfig {
+  return (role && ROLES[role as RoleId]) || ROLES[DEFAULT_ROLE];
 }
 
 // ─── more projects ────────────────────────────────────────────────────────────
@@ -566,18 +701,18 @@ export const PROJECT_DETAILS: Record<string, ProjectDetail> = {
 // ─── timeline ─────────────────────────────────────────────────────────────────
 export const TIMELINE = [
   {
-    title: "Solidity & DApp Developer",
-    org: "Reactive Network",
-    date: "Jul 2025 — present",
+    title: "Building independently — Go, cloud infra & systems",
+    org: "Self-directed",
+    date: "Jun 2026 — present",
     active: true,
-    desc: "Building production smart contract systems and DeFi tools on Reactive Network. Currently working on Liquidation Protection for ReacDEFI.",
+    desc: "Going deep on Go and cloud by rebuilding hard systems from scratch — a Terraform engine (light-tf), Git, and containerized Go services — and teaching what I learn through videos and technical threads.",
   },
   {
-    title: "Blockchain Developer Intern",
+    title: "DApp & Solidity Developer · FDE · Video Creator",
     org: "Reactive Network",
-    date: "Apr — Jul 2025",
+    date: "Apr 2025 — May 2026",
     active: false,
-    desc: "Developed cross-chain automation protocols and contributed to core infrastructure.",
+    desc: "Shipped ReacDEFI — the first production DApp on Reactive Network — built autonomous Reactive Smart Contracts, served as a Forward Deployed Engineer, and created developer-facing video content.",
   },
   {
     title: "$9K Grant + Press Coverage",
@@ -629,11 +764,16 @@ export const SKILL_PILLARS: { title: string; line: string; tools: string[] }[] =
     line:  "Natural language → on-chain action. Agent loops, MCP servers, x402 micropayments.",
     tools: ["Gemini", "Claude / Claude Code", "MCP", "x402", "TensorFlow"],
   },
+  {
+    title: "Backend & Cloud Infra",
+    line:  "Going deep on Go + cloud by rebuilding systems from scratch — IaC internals, containerized services, Postgres.",
+    tools: ["Go", "Docker", "AWS", "PostgreSQL", "Node.js / FastAPI", "Linux"],
+  },
 ];
 
 // Quiet supporting layer — kept short on purpose.
 export const SKILL_SUPPORT: string[] = [
-  "Electron", "Docker", "WebSocket", "Privy", "Tailwind",
+  "Electron", "WebSocket", "Privy", "Tailwind",
   "Framer Motion", "ffmpeg", "Vercel", "Sui", "Citrea", "Base",
 ];
 
@@ -660,12 +800,12 @@ export const TESTIMONIALS: { quote: string; author: string; role: string }[] = [
 export const X_STATS = {
   handle: "0xkasana",
   url: "https://x.com/0xkasana",
-  followers: "730",          // e.g. "1.2K"
-  impressions30d: "13K",     // e.g. "85K"
+  followers: "980",          // e.g. "1.2K"
+  impressions30d: "184.7K",     // e.g. "85K"
   topPost: {
     text: "Creativity is not a gift! It's a skill you obtain... You observe, You try, You observe, You execute. In the end, you got the eyes  that no one has !!",
     url: "https://x.com/0xkasana",
-    likes: "100",
+    likes: "3.5K+",
   },
 };
 
@@ -737,6 +877,40 @@ export const LOOKING_FOR = {
   roles:     ["Solidity / Smart Contract Engineer", "Full-Stack Web3", "DeFi Protocol Engineer"],
   stage:     "Seed → Series B (early enough to own real surface area)",
   location:  "Remote, or relocate for the right team",
-  available: "Full-time from June 2026 (graduating May 2026)",
+  available: "Immediately — final-year B.Tech, graduating July 2026",
   note:      "Open to founding-engineer roles where the team is okay with someone growing into the title.",
 };
+
+// ─── teaching / building in public ───────────────────────────────────────────
+// Videos and standout technical threads. Surfaced in its own section.
+// TODO: replace each `url` with the real X / YouTube link (currently → profile).
+export type Teaching = {
+  kind: "video" | "thread";
+  title: string;
+  blurb: string;
+  url: string;
+  meta: string; // e.g. "X · video", "X · thread"
+};
+export const TEACHING: Teaching[] = [
+  {
+    kind: "video",
+    title: "How Git really works — built from scratch in Go",
+    blurb: "The Git object model and architecture, explained from rebuilding it myself (see mygit).",
+    url: "https://x.com/0xkasana/status/2066101839725260949",
+    meta: "X · video",
+  },
+  {
+    kind: "video",
+    title: "JavaScript vs Go — a deep architectural comparison",
+    blurb: "Runtime, concurrency, and execution models — how the two languages actually differ under the hood.",
+    url: "https://x.com/0xkasana/status/2068583798141559104",
+    meta: "X · video",
+  },
+  {
+    kind: "video",
+    title: "System Design is not a linear path",
+    blurb: "How real systems get reasoned about — trade-offs, not a checklist. My first video.",
+    url: "https://x.com/0xkasana/status/2069812941038420048",
+    meta: "X · video",
+  },
+];

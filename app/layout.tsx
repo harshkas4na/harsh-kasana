@@ -11,22 +11,22 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Harsh Kasana — Solidity & DApp Developer",
+  title: "Harsh Kasana — Full-Stack & Smart Contract Engineer",
   description:
-    "Solidity & DApp Developer at Reactive Network. I build DeFi automation, cross-chain protocols, and AI-powered blockchain products end-to-end — from ideation to production.",
+    "Full-Stack & Smart Contract Engineer, ex-Reactive Network. I ship DeFi automation, cross-chain protocols, and AI-powered products end-to-end — now going deep on Go & cloud infrastructure.",
   metadataBase: new URL("https://harshkasana.dev"),
   alternates: { canonical: "/" },
   keywords: [
-    "Harsh Kasana", "Solidity Developer", "DApp Developer", "Reactive Network",
-    "DeFi", "Smart Contracts", "Web3", "Blockchain Engineer", "Cross-chain",
-    "Reactive Smart Contracts", "Next.js", "TypeScript",
+    "Harsh Kasana", "Full-Stack Engineer", "Smart Contract Engineer", "Backend Engineer",
+    "Solidity Developer", "Go", "Cloud Infrastructure", "Reactive Network",
+    "DeFi", "Smart Contracts", "Web3", "Cross-chain", "Next.js", "TypeScript",
   ],
   authors: [{ name: "Harsh Kasana", url: "https://harshkasana.dev" }],
   creator: "Harsh Kasana",
   openGraph: {
-    title: "Harsh Kasana — Solidity & DApp Developer",
+    title: "Harsh Kasana — Full-Stack & Smart Contract Engineer",
     description:
-      "Building DeFi infrastructure at Reactive Network. $13K+ in grants, 160 users in 48hrs, featured on CryptoSlate, Chainwire & Blockchain Magazine.",
+      "Ex-Reactive Network. $15K+ in grants & prizes, 160 users in 48hrs, featured on CryptoSlate, Chainwire & Blockchain Magazine. Now building in Go & cloud.",
     url: "https://harshkasana.dev",
     siteName: "Harsh Kasana",
     type: "website",
@@ -34,9 +34,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Harsh Kasana — Solidity & DApp Developer",
+    title: "Harsh Kasana — Full-Stack & Smart Contract Engineer",
     description:
-      "Building DeFi infrastructure at Reactive Network. $13K+ in grants, 160 users in 48hrs.",
+      "Ex-Reactive Network. $15K+ in grants & prizes, 160 users in 48hrs. Now building in Go & cloud.",
     creator: "@0xkasana",
   },
   icons: {
@@ -56,18 +56,18 @@ const personJsonLd = {
   "@type": "Person",
   name: "Harsh Kasana",
   url: "https://harshkasana.dev",
-  jobTitle: "Solidity & DApp Developer",
-  worksFor: { "@type": "Organization", name: "Reactive Network", url: "https://reactive.network" },
+  jobTitle: "Full-Stack & Smart Contract Engineer",
   alumniOf: { "@type": "CollegeOrUniversity", name: "IIIT Nagpur" },
   sameAs: [
     "https://github.com/harshkas4na",
     "https://x.com/0xkasana",
-    "https://www.linkedin.com/in/harsh-kasana-117288258/",
+    "https://www.linkedin.com/in/harsh-kasana-8b6a79258/",
     "https://medium.com/@harshkasana05",
   ],
   knowsAbout: [
     "Solidity", "Smart Contracts", "DeFi", "Reactive Smart Contracts",
-    "Cross-chain protocols", "Next.js", "TypeScript",
+    "Cross-chain protocols", "Go", "Docker", "AWS", "Cloud Infrastructure",
+    "Next.js", "TypeScript",
   ],
 };
 

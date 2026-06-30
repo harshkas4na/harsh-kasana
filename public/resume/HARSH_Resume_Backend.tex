@@ -1,0 +1,196 @@
+%-------------------------
+% Resume in Latex
+% Author : Harsh Kasana
+% Based off of: https://github.com/sb2nov/resume
+% License : MIT
+% Variant: BACKEND / CLOUD  (compile to HARSH_Resume_Backend.pdf)
+% Tuned to fit on a single page.
+%------------------------
+
+\documentclass[letterpaper,10pt]{article}
+\usepackage{setspace}
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\usepackage{fontawesome5}
+\usepackage{multicol}
+\usepackage{graphicx}
+\setlength{\multicolsep}{-3.0pt}
+\setlength{\columnsep}{-1pt}
+\input{glyphtounicode}
+\RequirePackage{tikz}
+\RequirePackage{xcolor}
+\RequirePackage{fontawesome}
+\usepackage{tikz}
+\usetikzlibrary{svg.path}
+
+\definecolor{cvblue}{HTML}{0E5484}
+\definecolor{black}{HTML}{130810}
+\definecolor{darkcolor}{HTML}{0F4539}
+\definecolor{cvgreen}{HTML}{3BD80D}
+\definecolor{taggreen}{HTML}{00E278}
+\definecolor{SlateGrey}{HTML}{2E2E2E}
+\definecolor{LightGrey}{HTML}{666666}
+\colorlet{name}{black}
+\colorlet{tagline}{darkcolor}
+\colorlet{heading}{darkcolor}
+\colorlet{headingrule}{cvblue}
+\colorlet{accent}{darkcolor}
+\colorlet{emphasis}{SlateGrey}
+\colorlet{body}{LightGrey}
+
+% Adjust margins
+\addtolength{\oddsidemargin}{-0.7in}
+\addtolength{\evensidemargin}{-0.7in}
+\addtolength{\textwidth}{1.4in}
+\addtolength{\topmargin}{-1.0in}
+\addtolength{\textheight}{1.3in}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+% Sections formatting
+\titleformat{\section}{
+  \vspace{-8pt}\scshape\raggedright\large\bfseries
+}{}{0em}{}[\color{black}\titlerule \vspace{-8pt}]
+
+% Ensure that generated pdf is machine readable/ATS parsable
+\pdfgentounicode=1
+
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{1.0\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & \textbf{#2} \\
+      \textit{#3} & \textit{#4} \\
+    \end{tabular*}\vspace{-6pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{1.001\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & \textbf{\small #2}\\
+    \end{tabular*}\vspace{-6pt}
+}
+
+\renewcommand\labelitemi{$\vcenter{\hbox{\tiny$\bullet$}}$}
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.0in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-4pt}}
+
+%-------------------------------------------
+%%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%----------HEADING----------
+\begin{center}
+    {\Huge \scshape Harsh Kasana} \\ \vspace{2pt}
+    \footnotesize Full-Stack \& Backend Engineer $\cdot$ going deep on Go \& cloud infrastructure \\ \vspace{4pt}
+    \small
+    \href{mailto:harshkasana05@gmail.com}{\raisebox{-0.2\height}\faEnvelope\ \underline{harshkasana05@gmail.com}} ~
+    \href{https://www.linkedin.com/in/harsh-kasana-8b6a79258/}{\raisebox{-0.2\height}\faLinkedin\ \underline{LinkedIn}} ~
+    \href{https://github.com/harshkas4na}{\raisebox{-0.2\height}\faGithub\ \underline{GitHub}} ~
+    \href{https://x.com/0xkasana}{\raisebox{-0.2\height}\faTwitter\ \underline{X}} ~
+    \href{https://harshkasana.dev/}{\raisebox{-0.2\height}\faGlobe\ \underline{Portfolio}}
+\end{center}
+
+%-----------EDUCATION-----------
+\section{EDUCATION}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {\textbf{Indian Institute of Information Technology, Nagpur}}{November 2022 -- July 2026}
+      {\textit{B.Tech in Electronics and Communication Engineering}}{CGPA: \textbf{8.37}}
+  \resumeSubHeadingListEnd
+
+%-----------EXPERIENCE-----------
+\section{EXPERIENCE}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {\textbf{Independent --- Building in Public}}{June 2026 -- Present}
+      {\textit{Backend \& Systems Engineering}}{}
+      \resumeItemListStart
+        \resumeItem{Rebuilding core infrastructure systems from scratch in \textbf{Go} to master their internals --- a Terraform-style IaC engine (\textbf{light-tf}), Git (\textbf{mygit}), and containerized HTTP services (\textbf{go-server}).}
+        \resumeItem{Publishing technical breakdowns (system design, Git internals, Go vs JS architecture) as videos and threads to a growing developer audience.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {\textbf{Reactive Network}}{April 2025 -- May 2026}
+      {\textit{DApp \& Solidity Developer $\cdot$ Forward Deployed Engineer $\cdot$ Video Creator}}{}
+      \resumeItemListStart
+        \resumeItem{Designed cross-chain, \textbf{event-driven architecture} on Base Mainnet --- autonomous contracts on a \textbf{Convex real-time backend}, monitoring positions \textbf{24/7} without bots or oracles.}
+        \resumeItem{Architected and shipped \textbf{ReacDEFI}, the first production DApp on Reactive Network --- \textbf{\$9,000 grant}, featured on \textbf{Chainwire, CryptoSlate \& Blockchain Magazine}.}
+        \resumeItem{As a \textbf{Forward Deployed Engineer}, shipped user integrations end-to-end and built an AI assistant (\textbf{Gemini}) that turns natural language into deployed automations.}
+      \resumeItemListEnd
+  \resumeSubHeadingListEnd
+
+%-----------PROJECTS-----------
+\section{PROJECTS}
+  \resumeSubHeadingListStart
+  \resumeProjectHeading
+    {\textbf{light-tf} $|$ \href{https://github.com/harshkas4na/light-tf}{\raisebox{-0.1\height}\faGithub\ \underline{Code}} $|$ \textit{Go, IaC, gRPC, AWS SDK}}{2026}
+    \resumeItemListStart
+      \resumeItem{A Terraform-style infrastructure-as-code engine rebuilt from scratch in \textbf{Go} --- resolves resource dependency graphs with a recursive \textbf{DFS}, computing topological apply order with full \textbf{cycle detection} (visited/visiting/unvisited).}
+      \resumeItem{Designed for \textbf{concurrent} resource creation via \textbf{goroutines + channels} and a \textbf{gRPC plugin interface} mirroring real Terraform providers; \textbf{AWS Go SDK} integration planned.}
+    \resumeItemListEnd
+
+  \resumeProjectHeading
+    {\textbf{go-server} $|$ \href{https://github.com/harshkas4na/go-server}{\raisebox{-0.1\height}\faGithub\ \underline{Code}} $|$ \textit{Go, Docker, docker-compose, PostgreSQL}}{2026}
+    \resumeItemListStart
+      \resumeItem{A \textbf{containerized Go HTTP API} backed by \textbf{PostgreSQL}, orchestrated with \textbf{Docker + docker-compose} and SQL schema initialization.}
+      \resumeItem{Built from scratch to internalize production backend fundamentals --- routing, database access, and container orchestration --- by implementing rather than following tutorials.}
+    \resumeItemListEnd
+
+  \resumeProjectHeading
+    {\textbf{mygit} $|$ \href{https://github.com/harshkas4na/mygit}{\raisebox{-0.1\height}\faGithub\ \underline{Code}} $|$ \textit{Go, Git internals, content-addressable storage}}{2026}
+    \resumeItemListStart
+      \resumeItem{Reimplemented Git's core \textbf{object model} --- blobs, trees, and commits in a \textbf{content-addressable store} keyed by hash.}
+      \resumeItem{Built plumbing commands from first principles to internalize how Git actually stores and tracks history.}
+    \resumeItemListEnd
+
+  \resumeProjectHeading
+    {\textbf{Hashtro} $|$ \href{https://hashtro.fun/}{\underline{Live}} $|$ \href{https://github.com/harshkas4na/Hashtro}{\raisebox{-0.1\height}\faGithub\ \underline{Code}} $|$ \textit{Node.js/Express, FastAPI, Next.js, Supabase}}{2025}
+    \resumeItemListStart
+      \resumeItem{Built a \textbf{3-service microservices architecture} (Next.js, Node.js/Express API, Python/FastAPI) with Privy auth, \textbf{24h TTL caching}, rate limiting, and Postgres row-level security.}
+      \resumeItem{Acquired \textbf{160 users within 48 hours} of launch behind a clean API boundary over Swiss Ephemeris computation and Google Gemini.}
+    \resumeItemListEnd
+  \resumeSubHeadingListEnd
+
+%-----------TECHNICAL SKILLS-----------
+\section{TECHNICAL SKILLS}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \item{
+     \textbf{Languages:}{ Go, TypeScript, JavaScript, Python, C++, Rust, SQL (PostgreSQL, MySQL)} \\
+     \textbf{Backend \& Infra:}{ Docker, docker-compose, AWS, PostgreSQL, Redis, Node.js, Express, FastAPI, gRPC, WebSocket, Linux, Git, Turborepo} \\
+     \textbf{Frontend \& Web3:}{ React, Next.js, TailwindCSS, Convex, Supabase $\cdot$ Solidity, Reactive Smart Contracts, Foundry, wagmi/viem, cross-chain architecture} \\
+    }
+ \end{itemize}
+
+%-----------ACHIEVEMENTS-----------
+\section{ACHIEVEMENTS}
+  \resumeItemListStart
+      \resumeItem{Secured a \textbf{\$9,000 USDT grant} from Reactive Network for ReacDEFI; product launch covered by \textbf{Chainwire, CryptoSlate, BlockTelegraph, and Blockchain Magazine}.}
+      \resumeItem{Won \textbf{1st (\$2,000)} and \textbf{2nd (\$2,000)} place at the \textbf{International Reactive Hackathon 2024}, competing against 397 hackers across 74 projects.}
+      \resumeItem{Secured \textbf{two awards} (\textbf{\$400} + \textbf{\$600}) in a US-based \textbf{Open Source Blockchain Bounty Program}; \textbf{2nd place} at the WEB3 Hackathon, IIIT SRICITY (500+ participants).}
+  \resumeItemListEnd
+
+\end{document}
