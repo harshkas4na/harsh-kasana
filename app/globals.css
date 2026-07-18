@@ -46,6 +46,35 @@ body {
   border-width: 0;
 }
 
+/* respect users who ask for less motion — kills fadeUp/reveal/pulse everywhere */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  html { scroll-behavior: auto; }
+}
+
+/* ambient hero glow — anchors the page, breaks the flat #0f0f0f */
+.hero-glow {
+  position: relative;
+}
+.hero-glow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 55% at 22% -12%, rgba(232, 180, 94, 0.085), transparent 70%),
+    radial-gradient(ellipse 50% 40% at 85% 0%, rgba(96, 165, 250, 0.045), transparent 70%);
+}
+.hero-glow > * {
+  position: relative;
+}
+
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -141,6 +170,14 @@ body {
 }
 @media (prefers-reduced-motion: reduce) {
   .project-card-collapsible { transition: none; }
+}
+
+/* keep collapsed card content out of the tab order (aria-hidden alone doesn't) */
+.project-card-collapsible[data-open="false"] > div {
+  visibility: hidden;
+}
+.project-card-collapsible > div {
+  transition: visibility 0.24s;
 }
 
 /* ── hero photo responsive ───────────────────────────────── */

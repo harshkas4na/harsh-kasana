@@ -42,6 +42,10 @@ const C = {
   accentText:   "#f5c878",
 };
 
+// Serif display face for the name + section headings — gives the page a voice
+// beyond default dark-mode Inter. Falls back gracefully if the font fails.
+const FONT_DISPLAY = "var(--font-fraunces), Georgia, 'Times New Roman', serif";
+
 // ─── hooks ────────────────────────────────────────────────────────────────────
 
 function useActiveSection(ids: string[]) {
@@ -139,6 +143,21 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
     <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: C.textMuted, fontFamily: "ui-monospace, monospace", marginBottom: 24 }}>
       {children}
     </p>
+  );
+}
+
+// Eyebrow + real heading. The tiny mono label alone left the page with no
+// scannable hierarchy — every section now gets an actual title.
+function SectionHeading({ eyebrow, title }: { eyebrow: string; title: string }) {
+  return (
+    <div style={{ marginBottom: 28 }}>
+      <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: C.accent, fontFamily: "ui-monospace, monospace", marginBottom: 8 }}>
+        {eyebrow}
+      </p>
+      <h2 style={{ fontSize: "clamp(24px, 5.5vw, 32px)", fontWeight: 600, color: C.text, margin: 0, letterSpacing: "-0.02em", lineHeight: 1.15, fontFamily: FONT_DISPLAY }}>
+        {title}
+      </h2>
+    </div>
   );
 }
 
@@ -250,6 +269,13 @@ function Nav({ onOpenPalette }: { onOpenPalette?: () => void }) {
                 <kbd style={{ fontFamily: "ui-monospace, monospace", fontSize: 11, color: "inherit" }}>⌘K</kbd>
               </button>
             )}
+            <a href="mailto:harshkasana05@gmail.com"
+              style={{ display: "inline-flex", alignItems: "center", gap: 6, marginLeft: 6, fontSize: 13, fontWeight: 600, color: C.accent, textDecoration: "none", padding: "5px 13px", borderRadius: 7, background: C.accentBg, border: `1px solid ${C.accentBorder}`, transition: "background 0.15s, color 0.15s" }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = C.accent; e.currentTarget.style.color = "#0f0f0f"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = C.accentBg; e.currentTarget.style.color = C.accent; }}
+            >
+              <Mail size={13} /> contact
+            </a>
           </div>
           <button ref={openBtnRef} className="show-mobile" onClick={() => setMenuOpen(true)}
             style={{ background: "none", border: `1px solid ${C.border}`, borderRadius: 7, padding: "6px 8px", cursor: "pointer", color: C.textSub, alignItems: "center", justifyContent: "center" }}
@@ -516,23 +542,25 @@ function ProjectCard({ p, i }: { p: Project; i: number }) {
                   <p style={{ color: C.textSub, fontSize: 14, margin: 0, lineHeight: 1.7 }}>{b}</p>
                 </div>
               ))}
-              {p.press && p.press.length > 0 && (
-                <div style={{ display: "flex", gap: 8, marginTop: 16, paddingTop: 14, borderTop: `1px solid ${C.border}`, flexWrap: "wrap", alignItems: "center" }}>
-                  <span style={{ fontSize: 11, color: C.textMuted, fontFamily: "ui-monospace, monospace", letterSpacing: "0.08em" }}>as seen in</span>
-                  {p.press.map((pr) => (
-                    <a key={pr.label} href={pr.url} target="_blank" rel="noopener noreferrer"
-                      style={{ fontSize: 12, fontWeight: 600, color: C.accent, textDecoration: "none", padding: "3px 10px", borderRadius: 5, background: C.accentBg, border: `1px solid ${C.accentBorder}`, transition: "all 0.15s", display: "inline-flex", alignItems: "center", gap: 4 }}
-                      onMouseEnter={(e) => { e.currentTarget.style.background = C.accent; e.currentTarget.style.color = "#0f0f0f"; }}
-                      onMouseLeave={(e) => { e.currentTarget.style.background = C.accentBg; e.currentTarget.style.color = C.accent; }}
-                    >
-                      {pr.label} <ExternalLink size={10} />
-                    </a>
-                  ))}
-                </div>
-              )}
             </div>
           </div>
         </div>
+
+        {/* press proof stays visible — most visitors never expand the card */}
+        {p.press && p.press.length > 0 && (
+          <div style={{ display: "flex", gap: 8, marginTop: 14, flexWrap: "wrap", alignItems: "center" }}>
+            <span style={{ fontSize: 11, color: C.textMuted, fontFamily: "ui-monospace, monospace", letterSpacing: "0.08em" }}>as seen in</span>
+            {p.press.map((pr) => (
+              <a key={pr.label} href={pr.url} target="_blank" rel="noopener noreferrer"
+                style={{ fontSize: 12, fontWeight: 600, color: C.accent, textDecoration: "none", padding: "3px 10px", borderRadius: 5, background: C.accentBg, border: `1px solid ${C.accentBorder}`, transition: "all 0.15s", display: "inline-flex", alignItems: "center", gap: 4 }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = C.accent; e.currentTarget.style.color = "#0f0f0f"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = C.accentBg; e.currentTarget.style.color = C.accent; }}
+              >
+                {pr.label} <ExternalLink size={10} />
+              </a>
+            ))}
+          </div>
+        )}
 
         {/* toggle */}
         <button onClick={handleToggle}
@@ -560,7 +588,7 @@ function ProjectCard({ p, i }: { p: Project; i: number }) {
             </a>
           ) : (
             <span
-              style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, padding: "7px 16px", borderRadius: 8, background: C.accent, color: "#0f0f0f", fontWeight: 700 }}
+              style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, padding: "7px 16px", borderRadius: 8, border: `1px solid ${C.accentBorder}`, background: C.accentBg, color: C.accent, fontWeight: 600 }}
             >
               Desktop App
             </span>
@@ -683,7 +711,7 @@ function SocialLink({ Icon, href, label, handle, blurb, preview }: SocialDef) {
 function RoleToggle({ role, setRole }: { role: RoleId; setRole: (r: RoleId) => void }) {
   const ids = Object.keys(ROLES) as RoleId[];
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20, flexWrap: "wrap" }}>
+    <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
       <span style={{ fontSize: 11, color: C.textMuted, fontFamily: "ui-monospace, monospace", letterSpacing: "0.1em", textTransform: "uppercase" }}>
         Viewing as
       </span>
@@ -718,13 +746,10 @@ function RoleToggle({ role, setRole }: { role: RoleId; setRole: (r: RoleId) => v
 function Hero({ px, W }: { px: string; W: number }) {
   const { cfg, role, setRole } = useRole();
   return (
-    <section style={{ maxWidth: W, margin: "0 auto", padding: `clamp(48px, 9vh, 96px) ${px} clamp(36px, 6vh, 56px)`, animation: "fadeUp 0.5s ease both" }}>
+    <section className="hero-glow" style={{ maxWidth: W, margin: "0 auto", padding: `clamp(48px, 9vh, 96px) ${px} clamp(36px, 6vh, 56px)`, animation: "fadeUp 0.5s ease both" }}>
 
-      {/* role toggle */}
-      <RoleToggle role={role} setRole={setRole} />
-
-      {/* status pills */}
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 32 }}>
+      {/* status pills + role toggle (identity leads; the switcher is secondary) */}
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 32, alignItems: "center" }}>
         <div style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "5px 12px 5px 9px", background: "rgba(34,197,94,0.1)", border: "1px solid rgba(34,197,94,0.25)", borderRadius: 20 }}>
           <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#22c55e", display: "inline-block", animation: "pulse-dot 2s ease-in-out infinite" }} />
           <span style={{ fontSize: 12, color: "#5fdd96", fontWeight: 600 }}>Available now</span>
@@ -732,6 +757,9 @@ function Hero({ px, W }: { px: string; W: number }) {
         <div style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "5px 12px 5px 9px", background: C.accentBg, border: `1px solid ${C.accentBorder}`, borderRadius: 20 }}>
           <Wrench size={12} style={{ color: C.accent }} />
           <span style={{ fontSize: 12, color: C.accent, fontWeight: 600 }}>{cfg.heroStatusPill}</span>
+        </div>
+        <div style={{ marginLeft: "auto" }}>
+          <RoleToggle role={role} setRole={setRole} />
         </div>
       </div>
 
@@ -750,7 +778,7 @@ style={{
         </div>
 
         <div style={{ flex: 1, minWidth: 0 }}>
-          <h1 style={{ fontSize: "clamp(28px, 7vw, 46px)", fontWeight: 800, letterSpacing: "-0.035em", color: C.text, margin: "0 0 10px", lineHeight: 1.1 }}>
+          <h1 style={{ fontSize: "clamp(30px, 7.5vw, 52px)", fontWeight: 600, letterSpacing: "-0.025em", color: C.text, margin: "0 0 10px", lineHeight: 1.05, fontFamily: FONT_DISPLAY }}>
             Harsh Kasana
           </h1>
 
@@ -768,7 +796,7 @@ style={{
           {/* primary value prop — what readers should see first */}
           <p style={{ color: C.text, fontSize: "clamp(15px, 4vw, 17px)", lineHeight: 1.65, margin: "0 0 14px", maxWidth: "min(600px, 100%)", fontWeight: 500, letterSpacing: "-0.005em" }}>
             {cfg.heroValueProp.lead}{" "}
-            <span style={{ color: C.textSub, fontWeight: 400 }}>{cfg.heroValueProp.sub}</span>
+            <span style={{ color: C.accentText, fontWeight: 400, fontFamily: FONT_DISPLAY, fontStyle: "italic" }}>{cfg.heroValueProp.sub}</span>
           </p>
 
           <p style={{ color: C.textMuted, fontSize: 14, lineHeight: 1.65, margin: 0, maxWidth: "min(600px, 100%)" }}>
@@ -827,9 +855,9 @@ function ProjectsSection() {
   return (
     <>
       <Reveal>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: 12, marginBottom: 24 }}>
-          <SectionLabel>Selected Projects</SectionLabel>
-          <span style={{ fontSize: 11, color: C.accent, fontFamily: "ui-monospace, monospace", letterSpacing: "0.08em", textTransform: "uppercase" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 12 }}>
+          <SectionHeading eyebrow="Work" title="Selected Projects" />
+          <span style={{ fontSize: 11, color: C.accent, fontFamily: "ui-monospace, monospace", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 32 }}>
             {cfg.toggleLabel}
           </span>
         </div>
@@ -1267,7 +1295,7 @@ export default function Portfolio() {
 
       {/* ── how I build ── */}
       <section id="how-i-build" style={{ maxWidth: W, margin: "0 auto", padding: `48px ${px}` }}>
-        <Reveal><SectionLabel>How I Build</SectionLabel></Reveal>
+        <Reveal><SectionHeading eyebrow="Process" title="How I Build" /></Reveal>
         <Reveal delay={0.05}>
           <p style={{ color: C.textSub, fontSize: 16, lineHeight: 1.7, margin: "0 0 28px", maxWidth: 640 }}>
             The path from idea to shipped is the same every time, regardless of stack — contract, web app, desktop binary, or infra:
@@ -1362,7 +1390,7 @@ export default function Portfolio() {
 
       {/* ── teaching / building in public ── */}
       <section id="teaching" style={{ maxWidth: W, margin: "0 auto", padding: `48px ${px}` }}>
-        <Reveal><SectionLabel>Teaching · Building in Public</SectionLabel></Reveal>
+        <Reveal><SectionHeading eyebrow="Teaching" title="Building in Public" /></Reveal>
         <Reveal delay={0.05}>
           <p style={{ color: C.textSub, fontSize: 16, lineHeight: 1.7, margin: "0 0 28px", maxWidth: 640 }}>
             I learn hard systems by rebuilding them, then explain what I found — in videos and technical threads.
@@ -1403,7 +1431,7 @@ export default function Portfolio() {
       {hasTestimonials && (
         <>
           <section style={{ maxWidth: W, margin: "0 auto", padding: `48px ${px}` }}>
-            <Reveal><SectionLabel>What People Say</SectionLabel></Reveal>
+            <Reveal><SectionHeading eyebrow="Signal" title="What People Say" /></Reveal>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 14 }}>
               {TESTIMONIALS.map((t, i) => (
                 <Reveal key={i} delay={i * 0.05}>
@@ -1423,7 +1451,7 @@ export default function Portfolio() {
 
       {/* ── about ── */}
       <section id="about" style={{ maxWidth: W, margin: "0 auto", padding: `48px ${px}` }}>
-        <Reveal><SectionLabel>About</SectionLabel></Reveal>
+        <Reveal><SectionHeading eyebrow="Background" title="About" /></Reveal>
         <div style={{ maxWidth: 660 }}>
           <Reveal delay={0.07}>
             <p style={{ color: C.textSub, fontSize: 15, lineHeight: 1.85, marginBottom: 18 }}>
@@ -1466,7 +1494,7 @@ export default function Portfolio() {
 
       {/* ── what I'm looking for ── */}
       <section style={{ maxWidth: W, margin: "0 auto", padding: `48px ${px}` }}>
-        <Reveal><SectionLabel>What I&apos;m Looking For</SectionLabel></Reveal>
+        <Reveal><SectionHeading eyebrow="Next" title="What I&rsquo;m Looking For" /></Reveal>
         <Reveal delay={0.05}>
           <div className="lf-grid" style={{ marginBottom: 18 }}>
             {[
@@ -1492,7 +1520,7 @@ export default function Portfolio() {
 
       {/* ── journey ── */}
       <section id="journey" style={{ maxWidth: W, margin: "0 auto", padding: `48px ${px}` }}>
-        <Reveal><SectionLabel>Journey</SectionLabel></Reveal>
+        <Reveal><SectionHeading eyebrow="Timeline" title="Journey" /></Reveal>
         <div style={{ maxWidth: 640 }}>
           {TIMELINE.map((t, i) => (
             <Reveal key={i} delay={i * 0.08}>
@@ -1521,7 +1549,7 @@ export default function Portfolio() {
       <footer id="contact" style={{ maxWidth: W, margin: "0 auto", padding: `48px ${px} 72px` }}>
         <Reveal>
           <div style={{ background: C.bgCard, border: `1px solid ${C.border}`, borderRadius: 14, padding: "32px 36px", marginBottom: 32, maxWidth: 600 }}>
-            <p style={{ fontSize: 20, fontWeight: 700, color: C.text, marginBottom: 10, letterSpacing: "-0.02em" }}>Let&apos;s work together</p>
+            <p style={{ fontSize: 26, fontWeight: 600, color: C.text, marginBottom: 10, letterSpacing: "-0.02em", fontFamily: FONT_DISPLAY }}>Let&apos;s work together</p>
             <p style={{ fontSize: 15, color: C.textSub, lineHeight: 1.75, marginBottom: 22 }}>
               {cfg.footerBlurb}
             </p>
