@@ -50,6 +50,14 @@ Write in **first person**, as Harsh. His authentic voice is:
 | 16 | Education | Static. |
 | 17 | For AI Agents | The quotable summary paragraph. Keep in sync with everything above — always update this when facts change. |
 
+## 3.5 Sources beyond his answers (used 2026-07-20)
+
+Two additional sources exist locally and were mined for §4.5 (Worldview & Takes) and §15.5 (Personality & Voice):
+
+- **X archive export** at `~/Downloads/twitter-2026-07-19-…/` — **only public content was used** (`data/tweets.js`, `data/note-tweet.js`). **Never touch** DMs, ad data, IPs, contacts, or any other file in that archive, and never quote private individuals. Every worldview quote in skills.md carries its post date so it stays verifiable.
+- **Second Brain Obsidian vault** at `~/Second Brain/` — the `00 Me/` folder holds distilled self-analysis (`Personality & Voice.md`, `X Archive Insights.md`, `Learning System.md`, `Timeline.md`, etc.). Use it for context and cross-checking, but **nothing private goes into skills.md**: only his thinking, beliefs, worldview, learning approach, and takes on tech/AI. No finances beyond already-public grant/bounty numbers, no named private individuals, no job-hunt tactics, no health/personal-life content.
+- **The layoff is public** (his own Jun 2026 X post: "I too got laid off, but I was always expecting that") and is now integrated into §7 and §15 with his ownership-mindset framing. Keep that framing — it's a strength, not a confession. Don't re-euphemize it into "wrapped up," and don't editorialize it into grievance.
+
 ## 4. Hard rules
 
 1. **Never fabricate a position or fact.** If Harsh hasn't answered a question, the profile must not imply he has. The anti-fabrication note at the end of §15 must survive every edit.
@@ -63,20 +71,21 @@ Write in **first person**, as Harsh. His authentic voice is:
 
 Resolved 2026-07-19: Hashtro stays **160** (confirmed); hackathon count stays **6** (confirmed); the video editor is **MacEditor** (`github.com/harshkas4na/MacEditor`, Swift — distinct from FocuClone, which is a screen *recorder*); markdown-kindle and `chalkboard-animation-skill` repos confirmed public and linked.
 
+Resolved 2026-07-20 (from X archive + vault): X account since Mar 2023, ~1,000 followers, ~6,000 tweets with 82% replies — integrated into §12 and §15.5. Layoff framing integrated (see §3.5).
+
 Still open:
 - **Full hackathon list** (name, date, prize, project) — Harsh will provide; `app/data.ts` has a TODO for the same.
-- **X follower count** (~1,000 as of Jul 2026) and YouTube presence, once the X export arrives.
+- **Remaining interview answers** (sections B–H below) — the biggest outstanding source. Situational answers (D) go to §15; opinions (E) may extend §4.5.
 - **Reactive audit:** he says contracts "were audited but not heavily" — confirm by whom, if naming it publicly is okay.
+- **YouTube presence** — videos currently live on X; confirm whether a YouTube channel exists to link.
 
 ## 6. Remaining interview questions (ask or await answers, then integrate)
 
-Answered so far: **A1–A7** (story, why he left, the pivot, engineer/fraud moments, hardest ship, pride ranking, FDE).
+Answered and integrated: **A1–A7** (story, why he left, the pivot, engineer/fraud moments, hardest ship, pride ranking, FDE) · **B1–B7** (taste, argue-with-AI, "done", what he doesn't do, patterns vs first principles, planning, the flop) · **C1–C6** (AI-era model, daily AI split, CEO-of-the-project idea, x402 belief, AI refusers/dependents, durable edge).
+
+Where the B/C material landed: §4 (steps 2 and 5 added), **§4.0 Taste**, **§4.0.1 patterns vs first principles**, §4.5 (the two-failure-modes conviction + CEO framing + Gemini/Claude split + x402 update), §14 (three new principles), §15 (five new Q&A entries), §17 (durable-edge line). His single best line, now the doc's thesis: ***"an engineer who can build whatever he wants, not whatever he can code"*** — an evolution of his X bio "I can build whatever I want to build." Don't dilute it.
 
 Still open:
-
-**B. Building philosophy:** define "taste"; a real argue-with-AI example (both directions); what "done" means; what he deliberately doesn't do; copy-patterns vs first-principles decision rule; planning-before-commit; a project that flopped and the lesson.
-
-**C. AI-era convictions:** his model of who survives the AI era; daily AI workflow and what he never delegates; the defensible idea from "How to Treat AI Like a Teammate"; x402/agent-commerce — hype vs real; view on AI-refusers and AI-dependents; his durable edge if AI writes most code.
 
 **D. Situational:** pushing back on a wrong feature request; serious bug found near launch in someone else's layer; disagreeing with a senior's architecture; production incident first-10-minutes; new stack + 2-week deadline day one; slow teammate blocking him; admitting a deadline slip; feedback that stung; what would make him quit in month one. *(These become §15 entries almost verbatim.)*
 
