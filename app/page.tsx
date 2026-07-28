@@ -11,7 +11,7 @@ import {
 import {
   PROJECTS, MORE, TIMELINE, SKILL_PILLARS, SKILL_SUPPORT, PRESS,
   TESTIMONIALS, LOOKING_FOR, orderProjects,
-  X_STATS, ARTICLES, PROJECT_HIGHLIGHTS, TEACHING,
+  X_STATS, ARTICLES, PROJECT_HIGHLIGHTS, TEACHING, CONTRACTS,
   ROLES, DEFAULT_ROLE,
   type Project, type RoleConfig, type RoleId,
 } from "./data";
@@ -296,6 +296,7 @@ function Nav({ onOpenPalette }: { onOpenPalette?: () => void }) {
         {[
           { label: "how I build", href: "#how-i-build" },
           { label: "projects",    href: "#projects"    },
+          { label: "contracts",   href: "#contracts"   },
           { label: "teaching",    href: "#teaching"    },
           { label: "about",       href: "#about"       },
           { label: "journey",     href: "#journey"     },
@@ -872,6 +873,7 @@ function ProjectsSection() {
 const RAIL_SECTIONS = [
   { id: "how-i-build", label: "How I Build" },
   { id: "projects",    label: "Projects" },
+  { id: "contracts",   label: "Contracts" },
   { id: "teaching",    label: "Teaching" },
   { id: "about",       label: "About" },
   { id: "journey",     label: "Journey" },
@@ -1061,6 +1063,7 @@ function buildCmdItems(resumeHref: string): CmdItem[] {
     { id: "nav-top",         label: "Top",          group: "Navigate", Icon: ArrowRight, kind: "anchor", target: "#top" },
     { id: "nav-how-i-build", label: "How I Build",  group: "Navigate", Icon: ArrowRight, kind: "anchor", target: "#how-i-build" },
     { id: "nav-projects",    label: "Projects",     group: "Navigate", Icon: ArrowRight, kind: "anchor", target: "#projects" },
+    { id: "nav-contracts",   label: "Contracts",    group: "Navigate", Icon: ArrowRight, kind: "anchor", target: "#contracts" },
     { id: "nav-teaching", label: "Teaching",      group: "Navigate", Icon: ArrowRight,   kind: "anchor", target: "#teaching" },
     { id: "nav-about",    label: "About",         group: "Navigate", Icon: ArrowRight,   kind: "anchor", target: "#about" },
     { id: "nav-journey",  label: "Journey",       group: "Navigate", Icon: ArrowRight,   kind: "anchor", target: "#journey" },
@@ -1381,6 +1384,57 @@ export default function Portfolio() {
                 </div>
                 <p style={{ fontSize: 13, color: C.textMuted, margin: 0, lineHeight: 1.55 }}>{p.desc}</p>
               </a>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      <Divider />
+
+      {/* ── smart contracts written ── */}
+      <section id="contracts" style={{ maxWidth: W, margin: "0 auto", padding: `48px ${px}` }}>
+        <Reveal><SectionHeading eyebrow="Solidity" title="Contracts I've Written" /></Reveal>
+        <Reveal delay={0.05}>
+          <p style={{ color: C.textSub, fontSize: 16, lineHeight: 1.7, margin: "0 0 32px", maxWidth: 660 }}>
+            Project cards hide the contract work inside them. This is the actual Solidity range —
+            grouped by what each system does, from the first ERC-20 to strategy contracts running
+            in someone else&apos;s canonical repo.
+          </p>
+        </Reveal>
+        <div style={{ display: "flex", flexDirection: "column", gap: 30 }}>
+          {CONTRACTS.map((g, gi) => (
+            <Reveal key={g.group} delay={0.07 + gi * 0.04}>
+              <div>
+                <div style={{ display: "flex", alignItems: "baseline", gap: 12, flexWrap: "wrap", marginBottom: 14 }}>
+                  <h3 style={{ fontSize: 15, fontWeight: 600, color: C.text, margin: 0, letterSpacing: "-0.01em" }}>
+                    {g.group}
+                  </h3>
+                  <p style={{ fontSize: 13, color: C.textMuted, margin: 0, lineHeight: 1.5 }}>{g.blurb}</p>
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 12 }}>
+                  {g.items.map((it) => (
+                    <div key={it.name}
+                      style={{
+                        padding: "15px 17px", borderRadius: 10, height: "100%",
+                        border: `1px solid ${it.star ? C.accentBorder : C.border}`,
+                        background: it.star ? C.accentBg : C.bgCard,
+                      }}
+                    >
+                      <div style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 7 }}>
+                        {it.star && <span aria-hidden="true" style={{ color: C.accent, fontSize: 13, lineHeight: 1.45 }}>★</span>}
+                        <span style={{ fontSize: 14, fontWeight: 600, color: C.text, lineHeight: 1.45 }}>{it.name}</span>
+                      </div>
+                      <p style={{ fontSize: 13, color: C.textMuted, margin: 0, lineHeight: 1.6 }}>{it.desc}</p>
+                      {it.proof && (
+                        <a href={it.proof.url} target="_blank" rel="noopener noreferrer"
+                          style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 11, color: C.accent, textDecoration: "none", marginTop: 10, fontFamily: "ui-monospace, monospace", letterSpacing: "0.04em" }}>
+                          {it.proof.label} <ArrowUpRight size={11} />
+                        </a>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
             </Reveal>
           ))}
         </div>

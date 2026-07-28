@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc *)",
+      "Bash(npx next *)",
+      "Bash(file \"/Users/harshkasana/PROJECTS/PERSONAL PROJECTS/portfolio/public/social-headers/\"*.png)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:crytpo-tree.vercel.app)",
+      "WebFetch(domain:walrus-sdk.vercel.app)",
+      "Bash(npm run *)",
+      "Bash(ffmpeg -version)",
+      "Bash(sed -i '' 's|/hero-images/reacdefi-hero\\\\.png|/hero-images/reacdefi-hero.jpg|g; s|/hero-images/hashtro-hero\\\\.png|/hero-images/hashtro-hero.jpg|g; s|/hero-images/metroDiaries-hero\\\\.png|/hero-images/metroDiaries-hero.jpg|g; s|/hero-images/FocuClone-hero\\\\.jpeg|/hero-images/FocuClone-hero.jpg|g' app/data.ts)",
+      "Bash(sed -i '' 's|/social-headers/github-header\\\\.png|/social-headers/github-header.jpg|g; s|/social-headers/linkedin-header\\\\.png|/social-headers/linkedin-header.jpg|g; s|/social-headers/X-header\\\\.png|/social-headers/X-header.jpg|g; s|/social-headers/medium-header\\\\.png|/social-headers/medium-header.jpg|g; s|/social-headers/X-analytics\\\\.png|/social-headers/X-analytics.jpg|g' app/page.tsx)"
+    ]
+  }
+}

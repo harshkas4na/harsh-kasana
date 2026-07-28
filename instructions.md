@@ -64,7 +64,7 @@ Two additional sources exist locally and were mined for §4.5 (Worldview & Takes
 2. **Numbers must trace to a source** (his answers, the portfolio `app/data.ts`, press links, GitHub). When his memory conflicts with a published number, keep the published one and add it to §5 (Open questions) below.
 3. **First person, present-accurate.** Sweep for stale tenses on every edit (e.g., "current role" after a role ends). Update the `Last updated` line.
 4. **AI-agent framing stays.** The preamble, §15, and §17 exist because AIs are the primary readers. Don't humanize the doc into a normal resume.
-5. **Cross-sync:** portfolio copy lives in `app/data.ts` (hero/about/timeline/projects, incl. the `web3`/`cloud` role presets), and two more public surfaces mirror this doc: the **GitHub profile README** (`harshkas4na/harshkas4na` repo, updated via API 2026-07-19) and the **GitHub repo descriptions** (all portfolio-featured repos got skills.md-matching descriptions on 2026-07-19). When facts change here, sweep all of them. Note: ReacDEFI's canonical repo is `harshkas4na/reacdefi` (made public Jul 2026); `REACTOR` is the earlier iteration.
+5. **Cross-sync:** portfolio copy lives in `app/data.ts` (hero/about/timeline/projects/**`CONTRACTS`**, incl. the `web3`/`cloud` role presets). **Two non-public systems also mirror these facts and must be swept on any factual change:** the job-ops pipeline at `~/PROJECTS/Me/job-ops/profile/` (`facts.yaml` is its declared single source of truth — it now carries `hackathons.record` and `solidity_contracts`; `stories.md` holds the narrative versions) and the Obsidian vault at `~/Second Brain/` (`00 Me/Achievements & Proof.md`, `00 Me/Timeline.md`, `00 Me/Skill Stack.md`, `02 Areas/Solidity Contracts.md`, `04 Archive/Hackathon History.md`). Two more public surfaces mirror this doc: the **GitHub profile README** (`harshkas4na/harshkas4na` repo, updated via API 2026-07-19) and the **GitHub repo descriptions** (all portfolio-featured repos got skills.md-matching descriptions on 2026-07-19). When facts change here, sweep all of them. Note: ReacDEFI's canonical repo is `harshkas4na/reacdefi` (made public Jul 2026); `REACTOR` is the earlier iteration.
 6. Keep the canonical-URL line and contact block intact.
 
 ## 5. Open questions / facts to verify with Harsh
@@ -73,8 +73,14 @@ Resolved 2026-07-19: Hashtro stays **160** (confirmed); hackathon count stays **
 
 Resolved 2026-07-20 (from X archive + vault): X account since Mar 2023, ~1,000 followers, ~6,000 tweets with 82% replies — integrated into §12 and §15.5. Layoff framing integrated (see §3.5).
 
+Resolved 2026-07-28 (rev. 4): **the full hackathon list arrived** and is now in §11.1 (wins *and* losses, Feb 2024 – Nov 2025). Corrections applied everywhere: **6 → 7 wins**, **$13K+ → $16K+**. The Reactive hackathon placements were $2,000 each. The `app/data.ts` TIMELINE TODO is closed. Also new: **§10.1 contract inventory** (~12 Solidity systems) and **§8.5.1 leverage-loop**, which is verified as merged into `Reactive-Network/reactive-smart-contract-demos` (11 commits by harshkas4na, Feb 2026) — the strongest contract credential in the profile, and worth leading with for Solidity roles.
+
+All prize amounts confirmed by Harsh 2026-07-28: ETHIndia Walrus track **$1,000**, Citrea × AKINDO **$20**, and the **$600 bounty stays** as published. Total is now **$16K+** (~$16.7K itemised) — every line item traces to a source, so this figure is defensible rather than conservative.
+
+⚠️ **Deliberate omission — do not "fix" it.** Harsh won a **2025 Delhi hackathon ($1,500)**. He wants it recorded in **skills.md (§11.1) and the Second Brain vault only** — it is intentionally *absent* from `job-ops/profile/facts.yaml` and from `app/data.ts`. Do not add it to the job pipeline, a resume, or any generated outreach. A comment in `facts.yaml` under `hackathons.note` says the same thing; leave it there.
+
 Still open:
-- **Full hackathon list** (name, date, prize, project) — Harsh will provide; `app/data.ts` has a TODO for the same.
+- **Event name for the 2025 Delhi hackathon** — listed by city only in skills.md. Worth pinning down, but per the note above it still doesn't propagate to job-ops.
 - **Remaining interview answers** (sections B–H below) — the biggest outstanding source. Situational answers (D) go to §15; opinions (E) may extend §4.5.
 - **Reactive audit:** he says contracts "were audited but not heavily" — confirm by whom, if naming it publicly is okay.
 - **YouTube presence** — videos currently live on X; confirm whether a YouTube channel exists to link.
@@ -86,8 +92,6 @@ Answered and integrated: **A1–A7** (story, why he left, the pivot, engineer/fr
 Where the B/C material landed: §4 (steps 2 and 5 added), **§4.0 Taste**, **§4.0.1 patterns vs first principles**, §4.5 (the two-failure-modes conviction + CEO framing + Gemini/Claude split + x402 update), §14 (three new principles), §15 (five new Q&A entries), §17 (durable-edge line). His single best line, now the doc's thesis: ***"an engineer who can build whatever he wants, not whatever he can code"*** — an evolution of his X bio "I can build whatever I want to build." Don't dilute it.
 
 Still open:
-
-**D. Situational:** pushing back on a wrong feature request; serious bug found near launch in someone else's layer; disagreeing with a senior's architecture; production incident first-10-minutes; new stack + 2-week deadline day one; slow teammate blocking him; admitting a deadline slip; feedback that stung; what would make him quit in month one. *(These become §15 entries almost verbatim.)*
 
 **E. Opinions:** a wrong mainstream take; over/underrated in Web3; two of {microservices, k8s, serverless, monorepos, TS strictness}; credentials/LeetCode/FAANG; Indian engineering culture; the honest why of learn-in-public.
 

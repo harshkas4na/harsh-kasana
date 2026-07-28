@@ -127,6 +127,30 @@ export const PROJECTS: Project[] = [
     ],
   },
   {
+    id: "leverage-loop",
+    name: "leverage-loop",
+    category: "DeFi Strategy · Protocol Demo",
+    hook: "Automated leverage looping across Aave and Uniswap — merged into Reactive Network's official demo repo",
+    badge: "In official repo",
+    badgeColor: "green",
+    tech: ["Solidity", "Reactive Smart Contracts", "Aave", "Uniswap", "Chainlink Oracles", "Foundry"],
+    live: null,
+    github: "https://github.com/Reactive-Network/reactive-smart-contract-demos/tree/main/src/demos/leverage-loop",
+    image: null,
+    video: null,
+    featured: false, // surfaced via the web3 role order + defi preset
+    bullets: [
+      "Automates the DeFi looping strategy end-to-end: supply collateral, borrow, swap, re-supply — repeated until a target health factor is reached, with no manual transactions.",
+      "LoopingRC watches the vault for Deposited and LoopStepExecuted events, then decides each iteration against a 1.5 target / 1.2 safety health factor and a 5-iteration cap.",
+      "LeverageAccount is a per-user on-chain vault using live oracles for dynamic slippage protection; a RescuableBase layer covers stuck-fund recovery.",
+      "Written for Reactive Network and merged into their canonical demos repository — the contracts ship as reference material other developers build from.",
+    ],
+    metrics: [
+      { value: "1.5", label: "target health factor" },
+      { value: "5", label: "max loop iterations" },
+    ],
+  },
+  {
     id: "metrodiaries",
     name: "MetroDiaries",
     category: "Consumer App",
@@ -264,7 +288,7 @@ export const FEATURED = PROJECTS.filter((p) => p.featured);
 // Use ?preset=ai (or defi/fullstack/backend) to reorder featured projects when
 // applying to a specific role. Unknown id → falls back to default order.
 export const PRESETS: Record<string, string[]> = {
-  defi:      ["reactor", "rc-agents", "monarc", "hashtro", "metrodiaries"],
+  defi:      ["reactor", "leverage-loop", "rc-agents", "monarc", "hashtro", "metrodiaries"],
   ai:        ["hashtro", "rc-agents", "reactor", "focuclone", "metrodiaries"],
   fullstack: ["metrodiaries", "reactor", "hashtro", "focuclone", "rc-agents"],
   backend:   ["reactor", "rc-agents", "hashtro", "metrodiaries", "monarc"],
@@ -323,7 +347,7 @@ export const ROLES: Record<RoleId, RoleConfig> = {
     footerBlurb:
       "Open to Smart Contract, full-stack Web3, and DeFi protocol roles. If you need someone who can own the full stack — ideation to production — reach out.",
     resumeHref: "/resume/HARSH_Resume.pdf",
-    projectOrder: ["reactor", "hashtro", "rc-agents", "metrodiaries", "focuclone"],
+    projectOrder: ["reactor", "hashtro", "rc-agents", "leverage-loop", "metrodiaries", "focuclone"],
     pillarOrder: ["Smart Contracts", "Full-Stack Product", "AI Integration"],
   },
   cloud: {
@@ -365,6 +389,111 @@ export const MORE: More[] = [
   { slug: "mercado",              name: "Mercado",             desc: "NFT marketplace with constant-product dynamic pricing + MERCAT token economics",        link: "https://github.com/harshkas4na/Mercado",               tag: "NFT"      },
   { slug: "cryptotree",           name: "CryptoTree",          desc: "Interactive mind-map of the blockchain ecosystem — 12 pillars, navigable",              link: "https://crytpo-tree.vercel.app",                       tag: "Web3"     },
   { slug: "reactive-network-dev", name: "reactive-network-dev",desc: "Claude Code skill — teaches Claude to design Reactive Network systems",                 link: "https://github.com/harshkas4na/reactive-network-dev", tag: "DevTools" },
+];
+
+// ─── smart contracts written ─────────────────────────────────────────────────
+// The Solidity range that project cards hide: individual contract systems,
+// grouped by what they do rather than by which project they shipped inside.
+// `proof` links the strongest public artifact; `star` marks work that landed in
+// someone else's canonical repo (a stronger signal than a personal repo).
+export type ContractItem = {
+  name: string;
+  desc: string;
+  proof?: { label: string; url: string };
+  star?: boolean;
+};
+export type ContractGroup = { group: string; blurb: string; items: ContractItem[] };
+
+export const CONTRACTS: ContractGroup[] = [
+  {
+    group: "Tokens & Markets",
+    blurb: "Where the Solidity started — token standards and pricing curves.",
+    items: [
+      {
+        name: "ERC-20 + ERC-1155 with demand-based pricing",
+        desc: "The MERCAT token economy and NFT editions whose price auto-adjusts to market demand on a constant-product curve — my first real contracts.",
+        proof: { label: "Mercado", url: "https://github.com/harshkas4na/Mercado" },
+      },
+    ],
+  },
+  {
+    group: "Autonomous Automation",
+    blurb: "Event-driven contracts that act on their own — no bots, no keepers, no off-chain oracle.",
+    items: [
+      {
+        name: "Decentralized autonomous governance",
+        desc: "Proposal and execution flow that settles itself on-chain. Won a $400 Reactive Network bounty.",
+        proof: { label: "Dec_Autnomous_Governance", url: "https://github.com/harshkas4na/Dec_Autnomous_Governance" },
+      },
+      {
+        name: "Automatic insurance payout",
+        desc: "Claims that pay out on a trigger condition instead of an adjuster. Built for the same bounty round — this one didn't win.",
+        proof: { label: "Fiducia", url: "https://github.com/harshkas4na/Auto_Insurance_Payouts" },
+      },
+      {
+        name: "Multi-chain stop-loss & limit orders",
+        desc: "Price-triggered order execution across chains, driven by Reactive Smart Contracts watching Uniswap.",
+        proof: { label: "Multi-Chain-Stop-Order", url: "https://github.com/harshkas4na/Multi-Chain-Stop-Order" },
+      },
+      {
+        name: "Aave liquidation protection",
+        desc: "Monitors health factors 24/7 and unwinds or tops up a position before liquidation hits. The flagship automation in ReacDEFI.",
+        proof: { label: "ReacDEFI", url: "https://reacdefi.app" },
+      },
+      {
+        name: "Contract deployer",
+        desc: "Deployment contract so non-technical users could ship their own automation instances without touching a terminal.",
+      },
+    ],
+  },
+  {
+    group: "DeFi Strategy",
+    blurb: "Capital-efficiency strategies encoded as contracts.",
+    items: [
+      {
+        name: "leverage-loop",
+        desc: "Supply, borrow, swap, re-supply — looping across Aave and Uniswap until a target health factor is hit, with oracle-driven slippage protection. Written for Reactive Network and merged into their official demos repo.",
+        proof: { label: "Reactive-Network/demos", url: "https://github.com/Reactive-Network/reactive-smart-contract-demos/tree/main/src/demos/leverage-loop" },
+        star: true,
+      },
+      {
+        name: "Uniswap V3 volatility range manager",
+        desc: "Rebalances a concentrated-liquidity position as volatility moves the useful range. Took 2nd at the Kwala Hacker House.",
+        proof: { label: "kwala-range-manager", url: "https://github.com/harshkas4na/kwala-range-manager" },
+      },
+      {
+        name: "Uniswap V3 fee collector",
+        desc: "Automated fee harvesting for LP positions, so yield compounds without manual claims.",
+      },
+    ],
+  },
+  {
+    group: "Cross-Chain",
+    blurb: "Contracts whose whole point is that they span networks.",
+    items: [
+      {
+        name: "NFTManager — cross-chain royalties",
+        desc: "Buy and sell ERC-721s on any chain, settled through Reactive Network. The real goal: creators keep earning royalties on every future resale, instead of depending on a marketplace like OpenSea choosing to honour them.",
+        proof: { label: "MONARC", url: "https://github.com/harshkas4na/MONARC" },
+      },
+      {
+        name: "Cross-chain lending",
+        desc: "Deposit ETH on one chain, receive the loan on another — collateral release triggered by repayment, with no bridge operator in between.",
+        proof: { label: "ReactiveFlow-Lender", url: "https://github.com/harshkas4na/ReactiveFlow-Lender" },
+      },
+    ],
+  },
+  {
+    group: "Adversarial / Research",
+    blurb: "Contracts written to be caught — the attacker half of a detection problem.",
+    items: [
+      {
+        name: "Money-laundering simulation suite",
+        desc: "Mock laundering flows, P2P exchange contracts and coin-mixing techniques, built deliberately so our own backend algorithm had something real to detect. Smart India Hackathon finalist.",
+        proof: { label: "CoinMixer_Contract", url: "https://github.com/harshkas4na/CoinMixer_Contract" },
+      },
+    ],
+  },
 ];
 
 // ─── project detail pages (for /projects/[slug]) ─────────────────────────────
@@ -722,20 +851,40 @@ export const TIMELINE = [
     desc: "REACTOR featured on Chainwire, CryptoSlate, Blockchain Magazine, and BlockTelegraph.",
   },
   {
+    title: "2nd Place — Kwala Hacker House",
+    org: "Hackathon",
+    date: "Nov 2025",
+    active: false,
+    desc: "A Uniswap V3 range manager that rebalances concentrated liquidity against market volatility.",
+  },
+  {
+    title: "Winner — Walrus track, ETHIndia (Bengaluru)",
+    org: "Hackathon",
+    date: "Dec 2024",
+    active: false,
+    desc: "Built and shipped Walrus-SDK, a TypeScript SDK for Walrus decentralized storage on Sui — later published to npm. India's largest Ethereum hackathon: 750+ hackers, 275 projects.",
+  },
+  {
     title: "1st + 2nd Place — International Reactive Hackathon",
     org: "Hackathon",
     date: "Nov 2024",
     active: false,
-    desc: "Won two placements in the same hackathon with separate cross-chain protocol submissions.",
+    desc: "Two separate cross-chain protocol submissions placed simultaneously — MONARC and REACTOR — at $2,000 each. The result that led to the grant and the job.",
   },
   {
     title: "$1,000 — US Blockchain Bounty Program",
     org: "Bounties",
     date: "2024",
     active: false,
-    desc: "$400 + $600 from two separate blockchain protocol bounties.",
+    desc: "$400 + $600 from two separate blockchain protocol bounties — the first was an autonomous governance protocol on Reactive Network.",
   },
-  // TODO: expand to your full 6 hackathon wins — name, date, prize, project
+  {
+    title: "First hackathon — the run begins",
+    org: "PCCOE, Pune",
+    date: "Feb 2024",
+    active: false,
+    desc: "Built Subasta, a Web2 auction platform, and won nothing. Seven wins followed across the next two years once the pivot to Web3 landed.",
+  },
   {
     title: "B.Tech ECE — CGPA 8.37",
     org: "IIIT Nagpur",
