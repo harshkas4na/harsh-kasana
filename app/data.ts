@@ -1023,8 +1023,8 @@ export const PROJECT_HIGHLIGHTS: ProjectHighlight[] = [
 export const LOOKING_FOR = {
   roles:     ["Solidity / Smart Contract Engineer", "Full-Stack Web3", "DeFi Protocol Engineer"],
   stage:     "Seed → Series B (early enough to own real surface area)",
-  location:  "Remote, or relocate for the right team",
-  available: "Immediately — final-year B.Tech, graduating July 2026",
+  location:  "Remote, or relocating — anywhere in India unconditionally, and outside India wherever the role sponsors a visa",
+  available: "Immediately — B.Tech, IIIT Nagpur, graduated May 2026",
   note:      "Open to founding-engineer roles where the team is okay with someone growing into the title.",
 };
 

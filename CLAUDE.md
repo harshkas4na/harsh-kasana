@@ -14,16 +14,31 @@ whatever Harsh captures with ⇧⌘J. Its sink name is **`portfolio`**, and it o
 - `public/skills.md` — §4.2 tools, §9 breadth table, skills inventory, timeline
 - `app/data.ts` — only for work with a public link; every entry there renders as one
 
+### What belongs here
+
+Portfolio is the sink **strangers read**, so its bar is the highest of the four. Admit something
+only if it is **already public or has a link**, and is finished enough to survive being looked at
+cold. `app/data.ts` is strictly link-only — no link, no entry.
+
+Never admit private repos, personal experimentation, work in progress, unshipped ideas, opinions,
+or anything about a client the client hasn't published themselves. **Those go to the vault**
+(`~/Second Brain`), the lossless sink that exists precisely to hold them. Routing an in-flight
+experiment here is the most damaging mistake available in this system: a portfolio that stays
+quiet is correct, one that overclaims isn't fixable by the next sync.
+
 **At the start of every session, run `me sinks`.** Then:
 
 1. **If `portfolio` has pending events, sync it** before doing other work — the files above are
    about to be read as if they were current, and stale is worse than empty. Use the `sync-me`
    skill, or by hand: `me digest --sink portfolio` → apply the edits → `me ack portfolio --id <id
    printed at the bottom of the digest>`.
-2. **If a sibling sink is behind, sync that one too** — `secondbrain` (`~/Second Brain`),
-   `jobops` (`~/PROJECTS/Me/job-ops`), `portfolio` (`~/PROJECTS/Me/portfolio`), `hackops`
-   (`~/PROJECTS/Me/hack-ops`). The `sync-me` skill has each sink's file list. Whichever session
-   gets there first does the work; the rest see a pending count of 0 and skip.
+2. **Then sync every other sink that is behind, in the same session** — `secondbrain`
+   (`~/Second Brain`), `jobops` (`~/PROJECTS/Me/job-ops`), `portfolio`
+   (`~/PROJECTS/Me/portfolio`), `hackops` (`~/PROJECTS/Me/hack-ops`). The `sync-me` skill has
+   each sink's file list **and its admission rules — which events belong in that sink at all**.
+   This is not optional and not a courtesy to some later session: sinks only ever fall further
+   behind, and the session that ran `me sinks` is the one holding the digest already. Whichever
+   session gets there first does the work; the rest see a pending count of 0 and skip.
 
 **Why this can't double-apply.** A sink is nothing but a cursor — "how far through the log have I
 read". Applying is what moves it, so an event already applied is behind every cursor that has
