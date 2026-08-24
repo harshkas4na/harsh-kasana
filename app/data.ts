@@ -389,6 +389,7 @@ export const MORE: More[] = [
   { slug: "mercado",              name: "Mercado",             desc: "NFT marketplace with constant-product dynamic pricing + MERCAT token economics",        link: "https://github.com/harshkas4na/Mercado",               tag: "NFT"      },
   { slug: "cryptotree",           name: "CryptoTree",          desc: "Interactive mind-map of the blockchain ecosystem — 12 pillars, navigable",              link: "https://crytpo-tree.vercel.app",                       tag: "Web3"     },
   { slug: "reactive-network-dev", name: "reactive-network-dev",desc: "Claude Code skill — teaches Claude to design Reactive Network systems",                 link: "https://github.com/harshkas4na/reactive-network-dev", tag: "DevTools" },
+  { slug: "midnight-health-factor-proof", name: "Midnight Health-Factor Proof", desc: "ZK circuit in Compact proving a lending position's health factor without disclosing collateral/debt — only a boolean is on-chain", link: "https://github.com/harshkas4na/midnight-health-factor-proof", tag: "ZK" },
 ];
 
 // ─── smart contracts written ─────────────────────────────────────────────────
@@ -968,6 +969,24 @@ export type Article = {
 };
 export const ARTICLES: Article[] = [
   // Stats + URLs refreshed from Medium analytics.
+  { title: "One File First: A Builder’s Guide to Building Your Own Tracking System",
+    platform: "Medium", url: "https://medium.com/@harshkasana05/one-file-first-a-builders-guide-to-building-your-own-tracking-system-eeecff947395",
+    date: "Aug 18, 2026" },
+  { title: "The Fraction Trick a Private Circuit Actually Needs",
+    platform: "Medium", url: "https://medium.com/@harshkasana05/the-fraction-trick-a-private-circuit-actually-needs-ce6d6dcf8238",
+    date: "Aug 17, 2026" },
+  { title: "The Threshold Was Right. The Floor Was Missing.",
+    platform: "Medium", url: "https://medium.com/@harshkasana05/the-threshold-was-right-the-floor-was-missing-434be4f6e3cd",
+    date: "Aug 7, 2026" },
+  { title: "The Book You Can Never Edit",
+    platform: "Medium", url: "https://medium.com/@harshkasana05/the-book-you-can-never-edit-fcd18830ac94",
+    date: "Aug 6, 2026" },
+  { title: "They Wanted a Pull Request Before They Would Even Read My Application",
+    platform: "Medium", url: "https://medium.com/@harshkasana05/they-wanted-a-pull-request-before-they-would-even-read-my-application-9129671ad9ad",
+    date: "Aug 5, 2026" },
+  { title: "I Thought My Applications Were the Problem. They Weren’t.",
+    platform: "Medium", url: "https://medium.com/@harshkasana05/i-thought-my-applications-were-the-problem-they-werent-d0394a93f6d0",
+    date: "Aug 4, 2026" },
   { title: "Who is Correct? The Intellectual vs. The “Normal” Mind",
     platform: "Medium", url: "https://medium.com/@harshkasana05",
     impressions: "3 reads", date: "Sep 17, 2025" },

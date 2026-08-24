@@ -5,3 +5,6 @@ node_modules
 .env.development.local
 .env.test.local
 .env.production.local
+
+# not referenced anywhere in the app — local only
+my-videos/
