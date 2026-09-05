@@ -8,3 +8,5 @@ node_modules
 
 # not referenced anywhere in the app — local only
 my-videos/
+# Next/TS build artifact — regenerated on every build, never worth a diff
+tsconfig.tsbuildinfo
