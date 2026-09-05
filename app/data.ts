@@ -103,6 +103,31 @@ export const PROJECTS: Project[] = [
     ],
   },
   {
+    id: "mev-tax-hook",
+    name: "MEV Tax Hook",
+    category: "Uniswap v4 · MEV",
+    hook: "Arb bots pay the LPs they extract from — a v4 hook that taxes the priority fee and donates it in the same swap",
+    badge: "Live on-chain",
+    badgeColor: "green",
+    tech: ["Solidity", "Uniswap v4 Hooks", "Foundry", "Unichain", "Next.js", "wagmi/viem"],
+    live: "https://mev-tax-hook.vercel.app",
+    github: "https://github.com/harshkas4na/mev-tax-hook",
+    image: null,
+    video: null,
+    featured: true,
+    bullets: [
+      "On Unichain, blocks are ordered by priority fee inside a TEE — so a bot's tip is a confession of what the arbitrage is worth. The hook taxes that tip proportionally and donates it to in-range LPs inside the same transaction, purely through flash accounting.",
+      "Deployed live on Unichain Sepolia with a seeded pool and real liquidity: the same swap at a 0.0005 gwei tip pays zero tax, at 5 gwei donates 2.5% to LPs, and the hook's own balance never moves. Retail is untaxed because retail has no race to win.",
+      "Replayed against 33 hours of real ETH/USDC prices: the winner gives up ~95% of the opportunity either way, so the hook does not shrink the arbitrage pie — it moves 86% of it from the sequencer to the LPs, for +11.8% LP income on a calm day.",
+      "Six configurable safeguards on top of the base mechanism — an EMA-based relative exemption clamped so it cannot be walked up a bot at a time, an absolute cap, an immutable ceiling, a price-impact surcharge, a backrun rebate and a PFDA discount.",
+    ],
+    metrics: [
+      { value: "86%",    label: "of the bid to LPs" },
+      { value: "+11.8%", label: "LP income, 33h replay" },
+      { value: "0",      label: "hook balance, by design" },
+    ],
+  },
+  {
     id: "rc-agents",
     name: "rc-agents",
     category: "AI Agents × DeFi",
@@ -288,7 +313,7 @@ export const FEATURED = PROJECTS.filter((p) => p.featured);
 // Use ?preset=ai (or defi/fullstack/backend) to reorder featured projects when
 // applying to a specific role. Unknown id → falls back to default order.
 export const PRESETS: Record<string, string[]> = {
-  defi:      ["reactor", "leverage-loop", "rc-agents", "monarc", "hashtro", "metrodiaries"],
+  defi:      ["mev-tax-hook", "reactor", "leverage-loop", "rc-agents", "monarc", "hashtro", "metrodiaries"],
   ai:        ["hashtro", "rc-agents", "reactor", "focuclone", "metrodiaries"],
   fullstack: ["metrodiaries", "reactor", "hashtro", "focuclone", "rc-agents"],
   backend:   ["reactor", "rc-agents", "hashtro", "metrodiaries", "monarc"],
@@ -389,7 +414,6 @@ export const MORE: More[] = [
   { slug: "mercado",              name: "Mercado",             desc: "NFT marketplace with constant-product dynamic pricing + MERCAT token economics",        link: "https://github.com/harshkas4na/Mercado",               tag: "NFT"      },
   { slug: "cryptotree",           name: "CryptoTree",          desc: "Interactive mind-map of the blockchain ecosystem — 12 pillars, navigable",              link: "https://crytpo-tree.vercel.app",                       tag: "Web3"     },
   { slug: "reactive-network-dev", name: "reactive-network-dev",desc: "Claude Code skill — teaches Claude to design Reactive Network systems",                 link: "https://github.com/harshkas4na/reactive-network-dev", tag: "DevTools" },
-  { slug: "mev-tax-hook",         name: "MEV Tax Hook",        desc: "Uniswap v4 hook that taxes priority-fee-proportional MEV and donates it to in-range LPs — live on Unichain Sepolia. 33h price replay: 86% of the bid goes to LPs instead of the sequencer",  link: "https://mev-tax-hook.vercel.app",                      tag: "DeFi"     },
   { slug: "midnight-health-factor-proof", name: "Midnight Health-Factor Proof", desc: "ZK circuit in Compact proving a lending position's health factor without disclosing collateral/debt — only a boolean is on-chain", link: "https://github.com/harshkas4na/midnight-health-factor-proof", tag: "ZK" },
 ];
 
