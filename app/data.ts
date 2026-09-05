@@ -389,6 +389,7 @@ export const MORE: More[] = [
   { slug: "mercado",              name: "Mercado",             desc: "NFT marketplace with constant-product dynamic pricing + MERCAT token economics",        link: "https://github.com/harshkas4na/Mercado",               tag: "NFT"      },
   { slug: "cryptotree",           name: "CryptoTree",          desc: "Interactive mind-map of the blockchain ecosystem — 12 pillars, navigable",              link: "https://crytpo-tree.vercel.app",                       tag: "Web3"     },
   { slug: "reactive-network-dev", name: "reactive-network-dev",desc: "Claude Code skill — teaches Claude to design Reactive Network systems",                 link: "https://github.com/harshkas4na/reactive-network-dev", tag: "DevTools" },
+  { slug: "mev-tax-hook",         name: "MEV Tax Hook",        desc: "Uniswap v4 hook that taxes priority-fee-proportional MEV and donates it to in-range LPs — live on Unichain Sepolia. 33h price replay: 86% of the bid goes to LPs instead of the sequencer",  link: "https://mev-tax-hook.vercel.app",                      tag: "DeFi"     },
   { slug: "midnight-health-factor-proof", name: "Midnight Health-Factor Proof", desc: "ZK circuit in Compact proving a lending position's health factor without disclosing collateral/debt — only a boolean is on-chain", link: "https://github.com/harshkas4na/midnight-health-factor-proof", tag: "ZK" },
 ];
 
